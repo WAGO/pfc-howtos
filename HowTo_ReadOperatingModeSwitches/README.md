@@ -1,10 +1,10 @@
-# Automatically copy SD-Card image into Internal-Flash on boot  
+#  Utilize liboms Operating-Mode-Switches-Reader  
 
 ## For Version 2019.3.1
 
-This HowTo show a way to update firmware of a given PFC200 without using additional tools other then just an SD-Card.
+This HowTo shows usage of liboms to recive current state of RUN-STOP-RESET switch and RST_ALL switch
 
-> Please see also: HowTo_AutoCopySD-CardImage2InternalFlashOnBoot.txt
+> Please see also: HowTo_ReadOperatingModeSwitches.txt
 
 # Compatibility list:
 | PFC | Compatible |

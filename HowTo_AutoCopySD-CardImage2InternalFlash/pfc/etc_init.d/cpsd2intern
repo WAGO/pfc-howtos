@@ -1,19 +1,32 @@
 #!/bin/sh
-# Copy sd card to internal flash.
+# Automatically copy firmware on SD-Card to internal flash when booting from SD.
+# ATTENTION: The operation manual switch has to be in position "STOP" otherwise the system
+# will be halted.
 #
-# Copy SD card to internal flash if system was booted from SD card
-# Set LED's U1 to U4 to yellow on start, set them green
-# if copy finished successfully, red on error.
-# Use argument makelink to create a symbolic link in /etc/rc.d.
-# This enables automatic copy on system startup. A boot from
-# internal flash will remove the link in /etc/rc.d.
+# Progress displayed via LED's U1 to U4 
+# YELLOW: Copy process is active
+# GREEN: Successful done!
+# RED: Finished with ERROR!
 #
-# Revision: $Revision: 10672 $
-# Author:   Hans-Josef Hoffmann : WAGO Kontakttechnik GmbH & Co. KG
+# Symbolic link in /etc/rc.d/ automatically removed on first boot from internal flash.
+
 
 PATH=/usr/bin:/usr/sbin:/bin:/sbin
 CFGPATH=/etc/config-tools
 RCLINK=/etc/rc.d/S95_cpsd2intern
+
+##################################################
+# Return values from omsreader
+##################################################
+# BUTTON_RUN        = 0x01      1
+# BUTTON_STOP       = 0x02      2
+# BUTTON_RESET      = 0x08      8
+# BUTTON_RESET_ALL  = 0x80    128
+##################################################
+# The button RESET_ALL is ored to the other values
+# if pressed.
+##################################################
+OMSREADER=/usr/bin/omsreader
 
 leds_off()
 {
@@ -47,37 +60,112 @@ leds_yellow()
     eventmsg 0x40010303
 }
 
+
+spinner()
+{
+    trap 0 1 2 9 9 9 9 9 9 9 9 9 15 RETURN;
+    local s=$(($SECONDS +$1));
+    (#tput civis;
+    while (($SECONDS<$s));
+        do for f in '|' '\' '-' '/';do
+            echo -n "$f";
+            sleep 1;
+            echo -n $'\b';
+        done;
+    done;);
+}
+
+errorState()
+{
+  leds_red
+  echo "Error occured"
+  . $CFGPATH/config_tool_defines
+  if [ -f $LAST_ERROR_FILENAME ]; then
+    cat $LAST_ERROR_FILENAME;
+    rm $LAST_ERROR_FILENAME
+  fi
+}
+
 case $1 in
     start)
+        echo "Starting AutoCopySD to internal flash..."
         bootmedia=$($CFGPATH/get_filesystem_data active-partition-medium)
         if [ "$bootmedia" = "sd-card" ]; then
-            echo "Copy SD card to internal flash. Takes a while ..."
-            echo "Finished when LED's U1 to U4 are lit green"
-            leds_yellow
-            $CFGPATH/copy_firmware_image source-medium=sd-card destination-medium=internal-flash &> /dev/null
-            if [ "$?" -eq "0" ]; then
-                leds_green
-                echo "Done"
-            else
-                leds_red
-                echo "Error occured"
-                . $CFGPATH/config_tool_defines
-                if [ -f $LAST_ERROR_FILENAME ]; then
-                    cat $LAST_ERROR_FILENAME;
-                    rm $LAST_ERROR_FILENAME
+
+            # Execute omsreader and get return value
+            retVal=`$OMSREADER`
+            echo "Switch is in postion: $retVal"
+            #Check if button is in "STOP" position
+            if [ "$retVal" = "STOP" ];
+            then
+                echo "Copy SD card to internal flash. Takes a while ..."
+                echo "Finished when LED's U1 to U4 are lit green"
+                leds_yellow
+                $CFGPATH/copy_firmware_image source-medium=sd-card destination-medium=internal-flash-nand &> /dev/null
+                if [ "$?" -eq "0" ]; then
+
+                    #Check if there is a fourth partition on the sd card
+                    #the original copy_firmware_image tool will not handle this.
+
+                    if [ -b /dev/mmcblk0p4 ]; then
+                      echo "Copy Datapartition..."
+                      mkdir -p /sd && \
+                      mount /dev/mmcblk0p4 /sd && \
+                      #mount EMMC home partition
+                      mount /dev/mmcblk1p5 /mnt && \
+                      mkdir -p /mnt/data && \
+                      #copy data
+                      cp -r /sd/* /mnt/data && \
+                      umount /sd && \
+                      rmdir /sd && \
+                      umount /mnt && \
+                      #mount EMMC rootpartion.1
+                      mount /dev/mmcblk1p2 /mnt && \
+                      cd /mnt && \
+                      #if directory data exists in delete it
+                      if [ -d data/ ]; then rm -rf data/; fi && \
+                      #create symlink to home/data/
+                      ln -fs /home/data /mnt/data && \
+                      sync && \
+                      cd / && \
+                      umount /mnt
+
+                      if [ "$?" -ne 0 ]; then
+                        errorState
+                      else
+                        leds_green
+                        echo "Done"
+                      fi
+                    else
+                      leds_green
+                      echo "Done"
+                    fi
+                else
+                  errorState
                 fi
-            fi
+                #We are finished but we will prevent booting
+                echo -e "Need a reboot: "
+             else #button is not in "STOP" position
+               leds_red
+               echo -e "\033[0;31m ..:: SYSTEM WILL BE HALTED - SWITCH IS NOT IN STOP MODE ::.."
+               echo -en "Halted: "
+             fi
+
+             #loop till the end of time
+             while [ 42 = 42 ]; do
+               spinner 4
+             done
         else
             rm -f $RCLINK
         fi
         ;;
 
-    makelink)
-        ln -sf /etc/init.d/cpsd2intern $RCLINK
-        ;;
+     makelink)
+       ln -sf /etc/init.d/cpsd2intern $RCLINK
+       ;;
 
-    *)
-        echo "Usage: ${0} start|makelink"
-        exit 1
-        ;;
+     *)
+       echo "Usage: ${0} start|makelink"
+       exit 1
+       ;;
 esac

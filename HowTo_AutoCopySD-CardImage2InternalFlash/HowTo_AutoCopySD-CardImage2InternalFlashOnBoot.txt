@@ -1,43 +1,70 @@
 -----------------------------------------------------------------------------------------
---- HowTo: Automatically copy SD-Card image into Internal-Flash on boot  
+--- HowTo: Automatically copy SD-Card image into Internal-Flash on boot
 -----------------------------------------------------------------------------------------
-Ref: WAGO-PFC-BSP-2017.7.1                                               FW: 02.07.07(10)
+This HowTo show a way to update firmware of a given PFCx00 without using additional tools
+other then just an SD-Card.
 
-This HowTo show a way to automaticaly update/overwrite PFC firmware in "internal flash",
-without usage of additional tools other then just an SD-Card.
+Basic is System-Init-Script "cpsd2intern", called on boot, checks actual boot location.
+In case booted from "SD-Card", standard copy script is used to update internal flash with
+firmware on SD-Card.
 
-The base is the System5-Init-Script "cpsd2intern", shipped with every firmware since FW08.
-The script checks actual boot location, In case booted from "SD-Card", the standard copy
-script is used to update internal flash with firmware on SD-Card.
+     ______________
+   /.--------------.\
+  //                \\
+ //                  \\
+|| .-..----. .-. .--. ||      Make sure that the on board operation switch is
+||( ( '-..-'|.-.||.-.|||      in STOP position. Otherwise no copy operation will
+|| \ \  ||  || ||||_||||      take action.
+||._) ) ||  \'-'/||-' ||
+ \\'-'  `'   `-' `'  //	      Also keep in mind if you use the prepared SD-Card you
+  \\                //        will not be able to boot in your normal system, while
+   \\______________//         using this SD-Card.
+    '--------------'
+          |_|_
+   ____ _/ _)_)
+       '  | (_)
+    .--'"\| ()
+          | |
+          | |
+          |_|
 
-The standard copy script "/etc/config-tools/copy_firmware_image" also used by:
-- "Web-Based-Management(WBM)" and
-- "WAGO-Console-Based-Management-Tool(cbm)".
+------------------------------------------------------------------
+Installation and usage of copy from SD card into internal flash:
+------------------------------------------------------------------
 
-Progress of firmware update displayed via LED's U1 to U4
-- YELLOW: Copy process is active(approx. 1 minute)
-- GREEN: Successful done!
-- RED: Finished with ERROR!
+1) Prepare your SD card with the normal firmware image
 
-You can run script at any time also by hand.
-    >/etc/init.d/cpsd2intern start
+2) Copy attached System-Init-Script "cpsd2intern" into folder "/etc/init.d"
+   also the "omsreader" into folder "/usr/bin"
 
-To enable the "On-Power-On" feature, create a sym-link in auto-start-folder "/etc/rc.d".
-You have the choice between creating sym-link by hand:
+2) Create symbolic link "S95_cpsd2intern" in folder "/etc/rc.d"
+
         > cd /etc/rc.d
         > ln -s ../init.d/cpsd2intern S95_cpsd2intern
 
-Alternatively let the script do this job for you:
-    >/etc/init.d/cpsd2intern makelink
+With "S95_" copy process started before CoDeSys runtime(plclinux_rt).
 
-Both commands create the symbolic link "/etc/rc.d/S95_cpsd2intern".
-With "S95_" copy process started automatically on boot before CoDeSys runtime(plclinux_rt).
+------------------------------------------------------------------
+Execution:
 
-The symbolic link in /etc/rc.d/ get automatically removed on first boot from internal flash.
+1) Plug your SD Card into PFC
+
+2) Power on.
+   The script is executed during startup.
+   The progress of firmware update is displayed via LED's U1 to U4
+    - YELLOW: Copy process is active(approx. 1 minute)
+    - GREEN: Successful done!
+    - RED: Finished with ERROR!
+
+3) After successfully copied your data. Power off.
+
+4) Unplug your SD Card.
+
+5) Power on. The PFC is starting from the internal flash and the Symbolic link in
+   /etc/rc.d/ automatically removed on first boot.
 
 REMARK:
 Not all settings, such as "Owner of Serial-Interface(ttyO0)" shipped with firmware
 image on SD-Card. ttyO0-Ownership stored inside electronic-type-label(EEPROM) on device.
-
 
 \eof

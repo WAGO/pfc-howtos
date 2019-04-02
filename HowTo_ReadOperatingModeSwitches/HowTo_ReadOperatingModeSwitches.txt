@@ -1,0 +1,65 @@
+------------------------------------------------------------------------
+- HowTo: Utilize liboms Operating-Mode-Switches-Reader
+------------------------------------------------------------------------
+This HowTo shows usage of liboms to recive current state of:
+- RUN-STOP-RESET switch
+- RST_ALL switch
+
+The application will:
+    - read both switches RUN-STOP-RESET and RESET-ALL
+    - deliver state of switches as text
+
+The output could look like this:
+
+    >/usr/bin/omsreader
+    RUN
+
+------------------------------------------------------------------------
+- Installation:
+------------------------------------------------------------------------
+1) Copy content of attached folder rules into ~/wago/bsp/ptxproj/rules.
+    >cp rules/* ~/wago/bsp/ptxproj/rules/
+
+2) Create folder ~/wago/bsp/ptxproj/src/omsreader.
+   >mkdir ~/wago/bsp/ptxproj/src/omsreader
+
+3) Copy content of folder src_omsdemos into newly created folder.
+    >cp src_omsreader/* ~/wago/bsp/ptxproj/src/omsreader/
+
+4) Take a look into the source code file
+    >cd ~/wago/bsp/ptxproj/src/omsreader
+    >cat omsreader.c
+
+5) Select package "omsreader" for build in ptxdist
+    >cd ~/wago/bsp/ptxproj/
+    >ptxdist menuconfig
+
+    Wago Specific -->
+        Tools       -->
+            [*] Operating-Mode-Switches reader tool
+
+    Save changes and exit.
+
+6) Build examples 
+    >ptxdist targetinstall omsreader
+
+7) Copy executables to PFC
+8) Make them executable
+    >chmod a+x /usr/bin/omsreader
+
+9) Start executable
+    >/usr/bin/omsreader
+
+10) The actual switch position will be printed to stdout
+
+    This could be:
+    RUN
+    STOP
+    RESET
+    or with the additon of '-RESET_ALL' like:
+    RUN-RESET_ALL
+    STOP-RESET_ALL
+    RESET-RESET_ALL (which will reboot the pfc by intend ;) )
+
+11) Have fun
+/eof

@@ -1,0 +1,8 @@
+## SECTION=wago_specific_tools
+
+config OMSREADER
+	bool
+	prompt "Operating-Mode-Switches reader tool"
+	help
+	  Reading START-STOP-RESET and RST_ALL-switch. The exit value will give information about the
+	  switch position.
