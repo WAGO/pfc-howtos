@@ -1,0 +1,42 @@
+-----------------------------------------------------------------------------------------
+--- HowTo: Automatically copy SD-Card image into Internal-Flash on boot  
+-----------------------------------------------------------------------------------------
+This HowTo show a way to update firmware of a given PFC200 without using additional tools 
+other then just an SD-Card. 
+
+Basic is System5-Init-Script "cpsd2intern", called on boot, checks actual boot location.
+In case booted from "SD-Card", standard copy script is used to update internal flash with 
+firmware on SD-Card.
+
+The standard copy script "/etc/config-tools/copy_firmware_image" also used by: 
+- "Web-Based-Management(WBM)" and 
+- "WAGO-Console-Based-Management-Tool(cbm)".
+
+Progress of firmware update displayed via LED's U1 to U4 
+- YELLOW: Copy process is active(approx. 1 minute) 
+- GREEN: Successful done!
+- RED: Finished with ERROR!
+
+You can run script at any time also by hand. 
+	>/etc/init.d/cpsd2intern start
+
+Symbolic link in /etc/rc.d/ automatically removed on first boot from internal flash.
+	
+REMARK: 
+Not all settings, such as "Owner of Serial-Interface(ttyO0)" shipped with firmware 
+image on SD-Card. ttyO0-Ownership stored inside electronic-type-label(EEPROM) on device. 
+
+
+Installation and usage of copy from SD card into internal flash
+------------------------------------------------------------------
+
+1) Copy attached System5-Init-Script "cpsd2intern" into folder "/etc/init.d"
+
+2) Create symbolic link "S95_cpsd2intern" in folder "/etc/rc.d"
+
+        > cd /etc/rc.d
+        > ln -s ../init.d/cpsd2intern S95_cpsd2intern
+
+With "S95_" copy process started before CoDeSys runtime(plclinux_rt).
+
+\eof
