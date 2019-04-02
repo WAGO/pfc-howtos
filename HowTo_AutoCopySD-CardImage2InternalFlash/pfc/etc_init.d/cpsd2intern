@@ -1,13 +1,15 @@
 #!/bin/sh
-# Automatically copy firmware on SD-Card to internal flash when booting from SD.
-#  
-# Progress displayed via LED's U1 to U4 
-# YELLOW: Copy process is active
-# GREEN: Successful done!
-# RED: Finished with ERROR!
+# Copy sd card to internal flash.
 #
-# Symbolic link in /etc/rc.d/ automatically removed on first boot from internal flash.
-
+# Copy SD card to internal flash if system was booted from SD card
+# Set LED's U1 to U4 to yellow on start, set them green
+# if copy finished successfully, red on error.
+# Use argument makelink to create a symbolic link in /etc/rc.d.
+# This enables automatic copy on system startup. A boot from
+# internal flash will remove the link in /etc/rc.d.
+#
+# Revision: $Revision: 10672 $
+# Author:   Hans-Josef Hoffmann : WAGO Kontakttechnik GmbH & Co. KG
 
 PATH=/usr/bin:/usr/sbin:/bin:/sbin
 CFGPATH=/etc/config-tools
@@ -70,8 +72,12 @@ case $1 in
         fi
         ;;
 
+    makelink)
+        ln -sf /etc/init.d/cpsd2intern $RCLINK
+        ;;
+
     *)
-        echo "Usage: ${0} start"
+        echo "Usage: ${0} start|makelink"
         exit 1
         ;;
 esac

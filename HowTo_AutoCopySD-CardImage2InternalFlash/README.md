@@ -1,6 +1,6 @@
 # Automatically copy SD-Card image into Internal-Flash on boot  
 
-## For Version 2014.10.3
+## For Version 2017.7.1
 
 This HowTo show a way to update firmware of a given PFC200 without using additional tools other then just an SD-Card.
 
@@ -10,9 +10,9 @@ This HowTo show a way to update firmware of a given PFC200 without using additio
 | PFC | Compatible |
 |:-------------|:------------:|
 | **PFC 100** | |
-| 750-8100 | N | 
-| 750-8101 | N |
-| 750-8102 | N |
+| 750-8100 | Y |
+| 750-8101 | Y |
+| 750-8102 | Y |
 |  |  |
 | **PFC 200** | |
 | 750-8201 | Y |
