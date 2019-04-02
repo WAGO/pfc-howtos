@@ -1,6 +1,6 @@
 # Automatically copy SD-Card image into Internal-Flash on boot  
 
-## For Version 2013.11.1
+## For Version 2014.10.3
 
 This HowTo show a way to update firmware of a given PFC200 without using additional tools other then just an SD-Card.
 
