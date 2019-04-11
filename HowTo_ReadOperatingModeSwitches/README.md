@@ -15,7 +15,6 @@ This HowTo shows usage of liboms to recive current state of RUN-STOP-RESET switc
 | 750-8102 | Y |
 |  |  |
 | **PFC 200** | |
-| 750-8201 | Y |
 | 750-8202 | Y |
 | 750-8203 | Y |
 | 750-8204 | Y |

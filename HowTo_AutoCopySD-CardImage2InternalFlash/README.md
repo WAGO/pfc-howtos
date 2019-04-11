@@ -15,7 +15,6 @@ This HowTo show a way to update firmware of a given PFC200 without using additio
 | 750-8102 | Y |
 |  |  |
 | **PFC 200** | |
-| 750-8201 | Y |
 | 750-8202 | Y |
 | 750-8203 | Y |
 | 750-8204 | Y |
