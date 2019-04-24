@@ -1,5 +1,15 @@
 # This repo includes all the HowTos available for PFC
 
+# Overview of existing HowTos
+
+| Name                               | for Version | Description |
+| :--------------------------------- | :---------- | :---------- |
+| AddPerfTool                        | 2019.3.1    | Adding perf tool |
+| AutoCopySD-CardImage2InternalFlash | 2019.3.1    | Automaticaly copies SD card image to internal flash |
+| ReadOperatingModeSwitches          | 2019.3.1    | Reads out the switch position |
+
+---
+
 You will find in any specific HowTo a dedicaded README.md which included a table that shows you the compatibiliy
 of this how to.
 
@@ -40,4 +50,5 @@ A version Information looks like this:
 ---
 
 Inside the HowTo directory you will find for older HowTos a **HowTo_XY.txt** file. This file contains a setup guide and provides some extra informations.
+
 

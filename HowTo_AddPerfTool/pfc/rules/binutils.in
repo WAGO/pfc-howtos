@@ -1,0 +1,21 @@
+## SECTION=debug_tools
+
+menuconfig BINUTILS
+	tristate
+	select GCCLIBS_GCC_S
+	select ZLIB
+	prompt "binutils                      "
+	help
+	  The GNU binutils are needed for some debug utilities, like oprofile.
+
+if BINUTILS
+
+config BINUTILS_READELF
+	bool
+	prompt "readelf"
+
+config BINUTILS_OBJDUMP
+	bool
+	prompt "objdump"
+
+endif
