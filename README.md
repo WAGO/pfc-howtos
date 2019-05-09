@@ -5,6 +5,7 @@
 | Name                               | for Version | Description |
 | :--------------------------------- | :---------- | :---------- |
 | AddPerfTool                        | 2019.3.1    | Adding perf tool |
+| AddTRDP                            | 2019.3.1    | Adding TRDP/TCNopen |
 | AutoCopySD-CardImage2InternalFlash | 2019.3.1    | Automaticaly copies SD card image to internal flash |
 | ReadOperatingModeSwitches          | 2019.3.1    | Reads out the switch position |
 

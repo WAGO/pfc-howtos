@@ -1,0 +1,26 @@
+#//
+#// $Id: WAGO_PFC_config 2016-03-16 12:00:00Z cmoeller $
+#//
+#// DESCRIPTION    Config file to make TRDP for WAGO PFC 
+#//
+#// AUTHOR         WAGO Kontakttechnik GmbH & Co. KG - Thomas Brandt
+#//
+#// This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0 
+#// If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/
+#// Copyright WAGO Kontakttechnik GmbH & Co KG, 2016. All rights reserved.
+#//
+
+ARCH = linux
+TARGET_VOS = posix
+TARGET_OS = LINUX
+TCPREFIX = /opt/LINARO.Toolchain-2017.10/arm-linux-gnueabihf/bin/arm-linux-gnueabihf-
+TCPOSTFIX = 
+DOXYPATH = /usr/local/bin/
+LIB_PATH = ../../platform-wago-pfcXXX/sysroot-target/
+
+# the _GNU_SOURCE is needed to get the extended poll feature for the POSIX socket
+
+CFLAGS += -Wall -fstrength-reduce -fno-builtin -fsigned-char -pthread -fPIC -D_GNU_SOURCE -DPOSIX
+LDFLAGS += -lrt -L $(LIB_PATH)usr/lib/
+
+LINT_SYSINCLUDE_DIRECTIVES = -i ./src/vos/posix -wlib 0 -DL_ENDIAN

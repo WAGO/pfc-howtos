@@ -1,0 +1,7 @@
+## SECTION=networking
+
+config TRDP
+	tristate
+	prompt "TCNOpen - TRDP"
+	help
+	  TCNOpen - Train Real Time Data Protocol
