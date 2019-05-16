@@ -1,0 +1,7 @@
+## SECTION=wago_specific_demo
+
+config KBUSDEMO
+        bool
+	prompt "KBUS demo programs on using ADI/DAL"	
+	help
+	  Demo Programs for kbus access 

@@ -1,0 +1,756 @@
+//---------------------------------------------------------------------------------------------------------------------
+//  Copyright (c) WAGO Kontakttechnik GmbH & Co. KG
+//
+//  PROPRIETARY RIGHTS are involved in the subject matter of this material.
+//  All manufacturing, reproduction, use and sales rights pertaining to this
+//  subject matter are governed by the license agreement. The recipient of this
+//  software implicitly accepts the terms of the license.
+//---------------------------------------------------------------------------------------------------------------------
+//---------------------------------------------------------------------------------------------------------------------
+///  \file     adi_functions.txt
+///
+///  \version  $Id:
+///
+///  \brief    Use of KBUS DAL/ADI Device Specific Functions
+///
+///  \author   WAGO Kontakttechnik GmbH & Co. KG
+//---------------------------------------------------------------------------------------------------------------------
+
+
+  Use of KBUS DAL/ADI Device Specific Functions
+
+
+  Header and Includes:
+
+//---------------------------------------------------------------------------------------------------------------------
+// include files for KBUS WAGO ADI
+//---------------------------------------------------------------------------------------------------------------------
+
+      #include <libpackbus.h>
+
+
+//---------------------------------------------------------------------------------------------------------------------
+// KBUS control functions
+//---------------------------------------------------------------------------------------------------------------------
+
+  Function: LIBPACKBUS_DAL_FUNCTION_PUSH
+
+      Evaluates KBUS data exchange. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNCTION_PUSH,
+                                                             (int32_t*)   &lFuncReturn );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      lFuncReturn:  DAL_SUCCESS:  OK
+                    DAL_FAILURE:  Module isn't initialized, application isn't active, ...
+
+
+  Function: LIBPACKBUS_DAL_FUNC_GET_DIGITAL_OFFSET
+
+      Reads active - and internal offset value. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_GET_DIGITAL_OFFSET,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (bool)       bOutputNotInput,
+                                                             (uint16_t*)  &usActiveOffset,
+                                                             (uint16_t*)  &usInternalOffset );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     bOutputNotInput:    TRUE := output offset; FALSE := input offset
+
+      param[out]    pusActiveOffset:    pointer to return active offset value [no of byte]
+
+      param[out]    pusInternalOffset:  pointer to return internal offset value [no of byte]
+
+      lFuncReturn:  DAL_SUCCESS: OK
+                    1 = NOT_OK:  invalid value pointer(s) (NULL)
+
+
+  Function: LIBPACKBUS_DAL_FUNC_SET_DIGITAL_OFFSET
+
+      Set active offset value. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_SET_DIGITAL_OFFSET,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (bool)       bOutputNotInput,
+                                                             (uint16_t)   usOffset );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     bOutputNotInput:    TRUE := output offset; FALSE := input offset
+
+      param[in]     usOffset:           offset value [no of byte]; offset := 0 -> use internal offset
+
+      lFuncReturn:  DAL_SUCCESS: OK
+                    1 = NOT_OK:  desired offset value is less then internal offset value
+
+
+//---------------------------------------------------------------------------------------------------------------------
+// functions to check KBUS configuration
+//---------------------------------------------------------------------------------------------------------------------
+
+  Function: LIBPACKBUS_DAL_FUNC_READ_TAB_9
+
+      Reads content of table 9. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_READ_TAB_9,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (uint8_t)    uchRegNo,
+                                                             (uint16_t*)  &usValue );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     uchRegNo      register number in table 9 := terminal slot number
+
+      param[out]    pusValue      pointer to target buffer
+
+      lFuncReturn:  DAL_SUCCESS:  OK
+                    -1 = NOT_OK:  register number = 0 or terminal not found
+                    -2 = NOT_OK:  invalid value pointer (NULL)
+                     2 = NOT_OK:  value not available / table not initialized
+
+
+  Function: LIBPACKBUS_DAL_FUNC_READ_CONF_REG
+
+      Reads a copy of terminal register 8, 10, 11, 12, 13, 16, 28, 29, 30, 32, 33, 34 and 35. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_READ_TAB_9,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchRegNo,
+                                                             (uint16_t*)  &usValue );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     uchSlotNo     terminal slot number
+
+      param[in]     uchRegNo      terminal register number
+
+      param[out]    pusValue      pointer to target buffer
+
+      lFuncReturn:  DAL_SUCCESS:  OK
+                    -1 = NOT_OK:  terminal not found
+                    -2 = NOT_OK:  unsupported register number
+                    -3 = NOT_OK:  invalid value pointer (NULL)
+                     2 = NOT_OK:  value not available / copies not initialized
+
+
+  Function: LIBPACKBUS_DAL_FUNC_GET_UID
+
+      Reads unified identification number of addressed terminal. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_GET_UID,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint32_t*)  &ulUid );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     uchSlotNo     slot number of the addressed terminal
+
+      param[out]    pulUid        pointer to unified identification number
+
+      lFuncReturn:  DAL_SUCCESS:  OK
+                    DAL_FAILURE:  invalid pointer (NULL), terminal not found, ...
+
+
+//---------------------------------------------------------------------------------------------------------------------
+// functions to manage asynchronous KBUS communication
+//---------------------------------------------------------------------------------------------------------------------
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_OPEN
+
+      Opens a connection to PTP - module therefore it instances a PTP control structure. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_OPEN,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void**)     &pvHandle );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[out]    ppvHandle:    pointer to a handle of a channel to PTP - module
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_VALUE_PTR
+                    LPKD_REQ_EVA_ERROR_NO_HANDLE_GEN
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_CLOSE
+
+      Closes a connection to PTP - module therefore it checks if the connection is still active. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_CLOSE,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:     handle of a channel to PTP - module
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+
+
+//---------------------------------------------------------------------------------------------------------------------
+// functions for asynchronous register access
+//---------------------------------------------------------------------------------------------------------------------
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_RD_REG
+
+      Starts read of addressed register content. 
+
+      Caution:
+      Access interrupts process data exchange several times for several cycles!
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_RD_REG,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchChannelNo,
+                                                             (uint8_t)    uchRegisterNo );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:       handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:      slot number of the addressed terminal
+
+      param[in]     uchChannelNo:   channel number in the addressed device
+
+      param[in]     uchRegisterNo:  register number in the addressed channel
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_TERM_IDX
+                    ...
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_RD_REG
+
+      Polls the status and data of a started read register request. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_RD_REG,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchChannelNo,
+                                                             (uint8_t)    uchRegisterNo,
+                                                             (uint16_t*)  &usValue );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:       handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:      slot number of the addressed terminal
+
+      param[in]     uchChannelNo:   channel number in the addressed device
+
+      param[in]     uchRegisterNo:  register number in the addressed channel
+
+      param[out]    pusValue:       content of the addressed register
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_VALUE_PTR
+                    LPKD_REQ_EVA_ERROR_CONT_NOT_FIT
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_WR_REG
+
+      Starts write to addressed register. 
+
+      Caution:
+      Access interrupts process data exchange several times for several cycles!
+
+      Caution:
+      Terminals do not return negative acknowledge! Write access to a read only register (e.g. SW version) will be 
+      accepted but not evaluated.
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_WR_REG,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchChannelNo,
+                                                             (uint8_t)    uchRegisterNo,
+                                                             (uint16_t)   usValue,
+                                                             (uint16_t)   usPassWord );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:       handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:      slot number of the addressed terminal
+
+      param[in]     uchChannelNo:   channel number in the addressed device
+
+      param[in]     uchRegisterNo:  register number in the addressed channel
+
+      param[in]     usValue:        data for the addressed register
+
+      param[in]     usPassWord:     password to control write protection
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_TERM_IDX
+                    ...
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_WR_REG
+
+      Polls the status and data of a started read register request. 
+
+      Caution:
+      Terminals do not return negative acknowledge! Write access to a read only register (e.g. SW version) will be 
+      accepted but not evaluated.
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_WR_REG,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchChannelNo,
+                                                             (uint8_t)    uchRegisterNo,
+                                                             (uint16_t)   usValue );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:       handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:      slot number of the addressed terminal
+
+      param[in]     uchChannelNo:   channel number in the addressed device
+
+      param[in]     uchRegisterNo:  register number in the addressed channel
+
+      param[in]     usValue:        data for the addressed register
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_CONT_NOT_FIT
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_RD_REG_LIST
+
+      Starts read of addressed register list. 
+
+      Caution:
+      Access interrupts process data exchange several times for several cycles!
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_RD_REG_LIST,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchChannelNo,
+                                                             (uint8_t)    uchRegisterNo,
+                                                             (uint8_t)    uchRegisterCnt );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:       handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:      slot number of the addressed terminal
+
+      param[in]     uchChannelNo:   channel number in the addressed device
+
+      param[in]     uchRegisterNo:  register number in the addressed channel
+
+      param[in]     uchRegisterCnt: number of registers to read (1 .. 64)
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_TERM_IDX
+                    ...
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_RD_REG_LIST
+
+      Polls the status and data of a started read register list request. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_RD_REG_LIST,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchChannelNo,
+                                                             (uint8_t)    uchRegisterNo,
+                                                             (uint8_t)    uchRegisterCnt,
+                                                             (uint16_t*)  ausValue );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:       handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:      slot number of the addressed terminal
+
+      param[in]     uchChannelNo:   channel number in the addressed device
+
+      param[in]     uchRegisterNo:  register number in the addressed channel
+
+      param[in]     uchRegisterCnt: number of registers to read (1 .. 64)
+
+      param[out]    ausValue:       content of the addressed registers
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_VALUE_PTR
+                    LPKD_REQ_EVA_ERROR_CONT_NOT_FIT
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_WR_REG_LIST
+
+      Starts write to addressed register list. 
+
+      Caution:
+      Access interrupts process data exchange several times for several cycles!
+
+      Caution:
+      Terminals do not return negative acknowledge! Write access to a read only register (e.g. SW version) will be 
+      accepted but not evaluated.
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_WR_REG_LIST,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchChannelNo,
+                                                             (uint8_t)    uchRegisterNo,
+                                                             (uint8_t)    uchRegisterCnt,
+                                                             (uint16_t*)  ausValue,
+                                                             (uint16_t)   usPassWord );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:       handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:      slot number of the addressed terminal
+
+      param[in]     uchChannelNo:   channel number in the addressed device
+
+      param[in]     uchRegisterNo:  register number in the addressed channel
+
+      param[in]     uchRegisterCnt: number of registers to read (1 .. 64)
+
+      param[in]     ausValue:       data for the addressed registers
+
+      param[in]     usPassWord:     password to control write protection
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_TERM_IDX
+                    ...
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_WR_REG_LIST
+
+      Polls the status and data of a started read register request. 
+
+      Caution:
+      Terminals do not return negative acknowledge! Write access to a read only register (e.g. SW version) will be 
+      accepted but not evaluated.
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_WR_REG_LIST,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchChannelNo,
+                                                             (uint8_t)    uchRegisterNo,
+                                                             (uint8_t)    uchRegisterCnt );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:       handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:      slot number of the addressed terminal
+
+      param[in]     uchChannelNo:   channel number in the addressed device
+
+      param[in]     uchRegisterNo:  register number in the addressed channel
+
+      param[in]     uchRegisterCnt: number of registers to read (1 .. 64)
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_CONT_NOT_FIT
+
+
+//---------------------------------------------------------------------------------------------------------------------
+// functions for asynchronous parameter access
+//---------------------------------------------------------------------------------------------------------------------
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_RD_PAR
+
+      Starts read of addressed parameter content. 
+
+      Caution:
+      Access interrupts process data exchange several times for several cycles!
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_RD_PAR,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchParameterNo,
+                                                             (uint16_t)   usPassWord );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:       handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:      slot number of the addressed terminal
+
+      param[in]     uchParameterNo: parameter number in the addressed terminal
+
+      param[in]     usPassWord:     password to control write protection
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_TERM_IDX
+                    ...
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_RD_PAR
+
+      Polls the status and data of a started read parameter request. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_RD_PAR,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchParameterNo,
+                                                             (uint16_t*)  &usValue,
+                                                             (uint16_t*)  &usStatus );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:       handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:      slot number of the addressed terminal
+
+      param[in]     uchParameterNo: parameter number in the addressed terminal
+
+      param[out]    pusValue:       content of the addressed parameter
+
+      param[out]    pusStatus:      content of status register 57
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_VALUE_PTR
+                    LPKD_REQ_EVA_ERROR_CONT_NOT_FIT
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_WR_PAR
+
+      Starts write to addressed parameter. 
+
+      Caution:
+      Access interrupts process data exchange several times for several cycles!
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_WR_PAR,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchParameterNo,
+                                                             (uint16_t)   usValue,
+                                                             (uint16_t)   usPassWord );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:       handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:      slot number of the addressed terminal
+
+      param[in]     uchParameterNo: parameter number in the addressed terminal
+
+      param[in]     usValue:        data for the addressed parameter
+
+      param[in]     usPassWord:     password to control write protection
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_TERM_IDX
+                    ...
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_WR_PAR
+
+      Polls the status and data of a started write parameter request. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_WR_PAR,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchParameterNo,
+                                                             (uint16_t)   usValue,
+                                                             (uint16_t*)  &usStatus );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:       handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:      slot number of the addressed terminal
+
+      param[in]     uchParameterNo: parameter number in the addressed terminal
+
+      param[in]     usValue:        data for the addressed parameter
+
+      param[out]    pusStatus:      content of status register 57
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_CONT_NOT_FIT
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_RD_PAR_LIST
+
+      Starts read of addressed parameter list. 
+
+      Caution:
+      Access interrupts process data exchange several times for several cycles!
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_RD_PAR_LIST,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchParameterNo,
+                                                             (uint8_t)    uchParameterCnt,
+                                                             (uint16_t)   usPassWord );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:         handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:        slot number of the addressed terminal
+
+      param[in]     uchParameterNo:   parameter number in the addressed terminal
+
+      param[in]     uchParameterCnt:  number of parameters to read (1 .. 256)
+      
+      param[in]    usPassWord:        password to control write protection
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_TERM_IDX
+                    ...
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_RD_PAR_LIST
+
+      Polls the status and data of a started read parameter list request. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_RD_PAR_LIST,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchChannelNo,
+                                                             (uint8_t)    uchParameterNo,
+                                                             (uint8_t)    uchParameterCnt,
+                                                             (uint16_t*)  ausValue,
+                                                             (uint16_t*)  &usStatus );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:         handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:        slot number of the addressed terminal
+
+      param[in]     uchParameterNo:   parameter number in the addressed terminal
+
+      param[in]     uchParameterCnt:  number of parameters to read (1 .. 256)
+
+      param[out]    ausValue:         content of the addressed parameters
+
+      param[out]    pusStatus:        content of status register 57
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_VALUE_PTR
+                    LPKD_REQ_EVA_ERROR_CONT_NOT_FIT
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_WR_PAR_LIST
+
+      Starts write to addressed parameter list. 
+
+      Caution:
+      Access interrupts process data exchange several times for several cycles!
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_START_WR_PAR_LIST,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchParameterNo,
+                                                             (uint8_t)    uchParameterCnt,
+                                                             (uint16_t*)  ausValue,
+                                                             (uint16_t)   usPassWord );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:         handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:        slot number of the addressed terminal
+
+      param[in]     uchParameterNo:   parameter number in the addressed terminal
+
+      param[in]     uchParameterCnt:  number of parameters to read (1 .. 256)
+
+      param[in]     ausValue:         data for the addressed parameters
+
+      param[in]     usPassWord:       password to control write protection
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_TERM_IDX
+                    ...
+
+
+  Function: LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_WR_PAR_LIST
+
+      Polls the status and data of a started read parameter request. 
+
+      (int32_t)lDalReturn = adi->CallDeviceSpecificFunction( LIBPACKBUS_DAL_FUNC_ASYNC_COM_POLL_WR_PAR_LIST,
+                                                             (int32_t*)   &lFuncReturn,
+                                                             (void*)      &vHandle,
+                                                             (uint8_t)    uchSlotNo,
+                                                             (uint8_t)    uchParameterNo,
+                                                             (uint8_t)    uchParameterCnt,
+                                                             (uint16_t*)  &usStatus );
+
+      lDalReturn:   DAL_SUCCESS:  Function found and evaluated
+                    DAL_NOTUSED:  Indicates a function is not implemented by the device
+
+      param[in]     pvHandle:         handle of a channel to PTP - module
+
+      param[in]     uchSlotNo:        slot number of the addressed terminal
+
+      param[in]     uchParameterNo:   parameter number in the addressed terminal
+
+      param[in]     uchParameterCnt:  number of parameters to read (1 .. 256)
+
+      param[out]    pusStatus:        content of status register 57
+
+      lFuncReturn:  LPKD_REQ_EVA_STATUS_OK
+                    LPKD_REQ_EVA_ERROR_INV_HANDLE
+                    LPKD_REQ_EVA_ERROR_CONT_NOT_FIT
+
+

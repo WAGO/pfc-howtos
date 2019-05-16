@@ -6,8 +6,9 @@
 | :--------------------------------- | :---------- | :---------- |
 | AddPerfTool                        | 2019.3.1    | Adding perf tool |
 | AddTRDP                            | 2019.3.1    | Adding TRDP/TCNopen |
+| HowTo_ADI-MyKBusApplikation        | 2019.3.1    | Demo C Application for KBUS |
 | AutoCopySD-CardImage2InternalFlash | 2019.3.1    | Automaticaly copies SD card image to internal flash |
-|HowTo_GenerateWUPFile		     | 2019.3.1    | Generate WAGO-Upload-File |
+|HowTo_GenerateWUPFile               | 2019.3.1    | Generate WAGO-Upload-File |
 | ReadOperatingModeSwitches          | 2019.3.1    | Reads out the switch position |
 
 ---
