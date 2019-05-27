@@ -1,4 +1,4 @@
-# Add Train-Reatime-Data-Protocol(TRDP) support 
+# Add Train-Realtime-Data-Protocol(TRDP) support 
   
 ## Every package is bundled to a specific firmware version: For Version 2019.3.1 - FW:03.00.35(99)
 
