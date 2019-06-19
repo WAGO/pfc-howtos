@@ -4,13 +4,14 @@
 
 | Name                               | for Version | Description |
 | :--------------------------------- | :---------- | :---------- |
-| AddPerfTool                        | 2019.3.1    | Adding perf tool |
-| AddTRDP                            | 2019.3.1    | Adding TRDP/TCNopen |
-| AddSQLiteCommandLineTool           | 2019.3.1    | Install the command-Line-Tool "sqlite3"|
-| ADI-MyKBusApplikation              | 2019.3.1    | Demo C Application for KBUS |
-| AutoCopySD-CardImage2InternalFlash | 2019.3.1    | Automaticaly copies SD card image to internal flash |
-| HowTo_GenerateWUPFile              | 2019.3.1    | Generate WAGO-Upload-File |
-| ReadOperatingModeSwitches          | 2019.3.1    | Reads out the switch position |
+| KbusModbusSlave                    | FW12.1 | Adding KbusModbusSlave |
+| AddPerfTool                        | FW12   | Adding perf tool |
+| AddTRDP                            | FW12   | Adding TRDP/TCNopen |
+| AddSQLiteCommandLineTool           | FW12   | Install the command-Line-Tool "sqlite3"|
+| ADI-MyKBusApplikation              | FW12   | Demo C Application for KBUS |
+| AutoCopySD-CardImage2InternalFlash | FW12   | Automaticaly copies SD card image to internal flash |
+| HowTo_GenerateWUPFile              | FW12   | Generate WAGO-Upload-File |
+| ReadOperatingModeSwitches          | FW12   | Reads out the switch position |
 
 ---
 

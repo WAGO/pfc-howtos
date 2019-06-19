@@ -1,0 +1,8 @@
+## SECTION=wago_specific_dal
+
+config KBUSMODBUSSLAVE
+	bool
+	default n
+	prompt "kbusmodbusslave"
+	help
+	     Standalone Modbus slave which mimics the 750-352 coupler. IO-Terminals accessed via KBUS.
