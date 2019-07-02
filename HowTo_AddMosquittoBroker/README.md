@@ -60,11 +60,12 @@ As usual, you can:
 <H1>Important to run Broker on PFC!
 
   Create your own IPK file.</H1>
+  Unpack generated IPK and compress to a new Version.
   ```
         $ar -x mosquitto.ipk                                        
         $tar -xvzf control.tar.gz                                 
         $tar -xvzf data.tar.gz                                    
-        $tar -cvzf control.tar.gz ./control ./postinstall         
+        $tar -cvzf control.tar.gz ./control ./postinst         
         $tar -cvzf data.tar.gz ./usr                              
         $ar -q mosquittoBroker_1.4.14_armhf.ipk debian.binary control.tar.gz data.tar.gz
   ```
