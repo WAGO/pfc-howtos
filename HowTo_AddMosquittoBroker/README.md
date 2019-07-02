@@ -57,7 +57,9 @@ As usual, you can:
 - transfer package "kbusmodbusslave_1.3.0_arm.ipk" into PFC's file system and call "ipkg install <pkg-name>.ipk"
 - utilize Web-Based-Management(WBM) feature "Software-Upload".
 
-  3. Create your own IPK file.
+<H1>Important to run Broker on PFC!
+
+  Create your own IPK file.</H1>
   ```
         $ar -x mosquitto.ipk                                        
         $tar -xvzf control.tar.gz                                 
