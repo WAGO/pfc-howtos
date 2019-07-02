@@ -10,8 +10,8 @@ This HowTo is / based on a clean installation of Ubuntu LTS, with an installed a
 # Build package "mosquitto" on development host:
 1. Copy attached rule file for "mosquitto.ipk" to given folder:
 ```
-$cp ./ptxproj/rules/kbusmodbusslave.in    ~/wago/ptxproj-2.5.23/rules/
-$cp ./ptxproj/rules/kbusmodbusslave.make  ~/wago/ptxproj-2.5.23/rules/
+$cp ./ptxproj/rules/mosquitto.in    ~/wago/ptxproj-2.5.23/rules/
+$cp ./ptxproj/rules/mosquitto.make  ~/wago/ptxproj-2.5.23/rules/
 
 ```
 
