@@ -1,0 +1,36 @@
+## SECTION=networking
+
+menuconfig MOSQUITTO
+	tristate
+	prompt "mosquitto                     "
+	select OPENSSL	if MOSQUITTO_TLS
+	select C_ARES	if MOSQUITTO_SRV
+	select LIBUUID	if MOSQUITTO_UUID
+	help
+	  Open source MQTT message broker, library, and client.
+
+if MOSQUITTO
+
+config MOSQUITTO_BROKER
+	bool
+	prompt "Broker"
+
+config MOSQUITTO_CLIENTS
+	bool
+	prompt "Clients"
+
+config MOSQUITTO_TLS
+	bool
+	prompt "TLS support"
+
+config MOSQUITTO_SRV
+	bool
+	prompt "SRV lookup support"
+
+config MOSQUITTO_UUID
+	bool
+	prompt "UUID as client id"
+
+endif
+
+# vim: ft=kconfig noet tw=72

@@ -1,0 +1,16 @@
+#!/bin/bash
+# IPKG post inst script:
+# WAGO Kontakttechnik GmbH & Co. KG / Helmut.Saal@wago.com
+
+mkdir /etc/mosquitto/
+touch /etc/mosquitto/mosquitto.conf
+echo "user user" > /etc/mosquitto/mosquitto.conf
+chmod 644 /etc/mosquitto/mosquitto.conf
+
+touch /etc/init.d/startmosquitto
+echo "mosquitto -c /etc/mosquitto/mosquitto.conf -d" > /etc/init.d/startmosquitto
+chmod 744 /etc/init.d/startmosquitto
+
+ln -s /etc/init.d/startmosquitto /etc/rc.d/S99_startmosquitto
+
+mosquitto -c /etc/mosquitto/mosquitto.conf -d
