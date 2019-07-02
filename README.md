@@ -4,6 +4,7 @@
 
 | Name                               | for Version | Description |
 | :--------------------------------- | :---------- | :---------- |
+| mosquittoBroker                    | FW12.1 | Adding MosquittoBroker |
 | KbusModbusSlave                    | FW12.1 | Adding KbusModbusSlave |
 | AddPerfTool                        | FW12   | Adding perf tool |
 | AddTRDP                            | FW12   | Adding TRDP/TCNopen |
