@@ -1,6 +1,6 @@
 # Adding Mosquitto Broker to the PFC or Touch Panel
 
-## Every package is bundled to a specific firmware version: For Version 12.1- FW:03.00.39(12)
+## Every package is bundled to a specific firmware version: For Version 12.1- FW:03.00.39(99)
 
 This HowTo shows how to build and install the Mosquitto Broker.
 
