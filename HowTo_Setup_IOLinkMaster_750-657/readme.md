@@ -1,4 +1,4 @@
-# Setup using sensor for point level detection IFM **LMT100**.
+# Setup using sensor for point level detection IFM **LMT100**
 
 ## Obtaining IODD file
 
