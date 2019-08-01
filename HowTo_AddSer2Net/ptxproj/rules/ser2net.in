@@ -1,0 +1,10 @@
+## SECTION=networking
+
+config SER2NET
+	bool
+        select GENSIO
+        select LIBYAML
+	default n
+	prompt "ser2net"
+	help
+	    Allows a pyhsical serial port to be accessed over ethernet 

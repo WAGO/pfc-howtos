@@ -1,0 +1,22 @@
+%YAML 1.1
+---
+#
+# This is a ser2net configuration file, showing examples of all
+# sorts of things.  It's all commented out so it's safe to put
+# in /etc/ser2net/ser2net.yaml.
+#
+# This is described in ser2net.yaml(5)
+
+# YAML gives an error on empty files, just add something so the
+# error doesn't happen.
+define: &confver 1.0
+
+# # Set all baud rates to 115200n81 by default.
+default:
+   name: speed
+   value: 115200n81
+
+connection: &test
+  accepter: telnet(rfc2217),tcp,2000
+  connector: serialdev,/dev/serial,local
+
