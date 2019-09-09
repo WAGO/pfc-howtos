@@ -1,6 +1,6 @@
 # Adding KbusModbusPFCSlave to the PFC
 
-## Every package is bundled to a specific firmware version: For Version 12.1- FW:03.00.39(99)
+## Every package is bundled to a specific firmware version: For Version 13 - FW:03.01.07(99)
 
 This HowTo shows how to build and install the Kbus Modbus Slave application 
 "kbusmodbusslave" who acting like a Modbus-Coupler 750-352.
@@ -19,25 +19,25 @@ This HowTo is / based on a clean installation of Ubuntu LTS, with an installed a
 # Build package "kbusmodbusslave" on development host:
 1. Copy attached rule file and sources for "kbusmodbusslave" to given folder:
 ```
-$cp ./ptxproj/rules/kbusmodbusslave.in    ~/wago/ptxproj-2.5.23/rules/
-$cp ./ptxproj/rules/kbusmodbusslave.make  ~/wago/ptxproj-2.5.23/rules/
-$cp ./ptxproj/src/kbusmodbusslave-1.3.0.tar.bz2 ~/wago/ptxproj-2.5.23/src/
+$cp ./ptxproj/rules/kbusmodbusslave.in    ~/wago/ptxproj/rules/
+$cp ./ptxproj/rules/kbusmodbusslave.make  ~/wago/ptxproj/rules/
+$cp ./ptxproj/src/kbusmodbusslave-1.3.0.tar.bz2 ~/wago/ptxproj/src/
 ```
 
 2. Select "kbusmodbusslave" package for build
 ```
-$cd ~/wago/ptxproj-2.5.23/
+$cd ~/wago/ptxproj/
 $ptxdist menuconfig
       Wago Specific                   ---> [ENTER]
       DAL - Device Abstraction Layer  ---> [ENTER]
-      [*]     Modbus-PFC-Slave
+          [*]     Modbus-PFC-Slave
 
       <Exit>, <Exit>, <Exit> and <Yes>
 ```
 
 3. Clean the package
 ```
-$cd ~/wago/ptxproj-2.5.23
+$cd ~/wago/ptxproj
 $ptxdist clean kbusmodbusslave
 ```
 
@@ -47,17 +47,17 @@ $ptxdist clean kbusmodbusslave
         $ptxdist targetinstall kbusmodbusslave
     ```
     Afterwards you should find the IPKG installer package file:
-        ~/wago/ptxproj-2.5.23/platform-wago-pfcXXX/packages/kbusmodbusslave_1.3.0_arm.ipk
+        ~/wago/ptxproj/platform-wago-pfcXXX/packages/kbusmodbusslave_1.3.0_arm.ipk
 
   2. Build complete firmware image "sd.hdimg"  (optional)
   ```
-        $cd ~/wago/ptxproj-2.5.23/
+        $cd ~/wago/ptxproj/
         $ptxdist clean
         $ptxdist go -q
         $ptxdist images
   ```
    Afterwards you should find the firmware image "sd.hdimg":
-        ~/wago/ptxproj-2.5.23/platform-wago-pfcXXX/images/sd.hdimg          #The firmware image
+        ~/wago/ptxproj/platform-wago-pfcXXX/images/sd.hdimg          #The firmware image
 
 As usual, you can:
 - copy image file "sd.hdimg" with command "dd" to SD-Card and boot PFC200 from it.
