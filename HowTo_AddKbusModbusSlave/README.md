@@ -1,6 +1,6 @@
 # Adding KbusModbusPFCSlave to the PFC
 
-## Every package is bundled to a specific firmware version: For Version 13 - FW:03.01.07(99)
+## Every package is bundled to a specific firmware version: For Version 14 - FW:03.02.02(99)
 
 This HowTo shows how to build and install the Kbus Modbus Slave application 
 "kbusmodbusslave" who acting like a Modbus-Coupler 750-352.
@@ -240,6 +240,23 @@ Default configuration file: /etc/kbusmodbusslave.conf
 
     #SET KBUS CYCLE MS (Default: 50)
     kbus_cycle_ms 50
+
+--------------------------------------------------------------------------------------
+# Debug Modes
+Via Parameter "verbose" you are able to generate some debug information.
+A higher value will generate noisier output.
+
+Currently the following stages are implemented:
+
+| Name          | Value |
+| ------------- |:-----:|
+| VERBOSE_STD   |  1    |
+| VERBOSE_INFO  |  2    |
+| VERBOSE_GOSSIPY | 3   |
+| VERBOSE_DEBUG |  7    |
+
+## Special Information
+In VERBOS_DEBUG mode the raw modbus telegram for RX and TX will be shown for debug purpose.
 
 --------------------------------------------------------------------------------------
 # Operration Mode
