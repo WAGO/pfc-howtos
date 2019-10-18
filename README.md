@@ -10,7 +10,7 @@
 | ADI-MyKBusApplikation              | FW12   | Demo C Application for KBUS |
 | AutoCopySD-CardImage2InternalFlash | FW12   | Automaticaly copies SD card image to internal flash |
 | HowTo_GenerateWUPFile              | FW12   | Generate WAGO-Upload-File |
-| KbusModbusSlave                    | FW12.1 | Adding KbusModbusSlave |
+| KbusModbusSlave                    | FW14 | Adding KbusModbusSlave |
 | mosquittoBroker                    | FW12.1 | Adding a Mosquitto Broker |
 | ReadOperatingModeSwitches          | FW12   | Reads out the switch position |
 | Ser2Net                            | FW13   | Serial to Network Proxy |
