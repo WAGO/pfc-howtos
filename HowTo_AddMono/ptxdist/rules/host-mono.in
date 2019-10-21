@@ -1,0 +1,9 @@
+## SECTION=hosttools_noprompt
+
+config HOST_MONO
+	tristate
+	select GLIB
+	prompt "host-mono"
+	help
+	  mono is a runtime implementation of the ECMA Common Language
+	  Infrastructure. It can be used to run ECMA and .NET applications.

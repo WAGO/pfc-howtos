@@ -1,0 +1,10 @@
+## SECTION=bytecode_engines
+
+config MONO
+	tristate
+	select HOST_MONO
+	select HOST_CMAKE
+	prompt "mono"
+	help
+	  mono is a runtime implementation of the ECMA Common Language
+	  Infrastructure. It can be used to run ECMA and .NET applications.
