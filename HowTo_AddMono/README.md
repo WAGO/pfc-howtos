@@ -7,7 +7,7 @@ mono is a runtime implementation of the ECMA Common Language Infrastructure.
 It can be used to run ECMA and .NET applications.
 
 # CAUTION
-> The mono package is very large package. Without additional action it will not fit into the default file system!  See below and Check "HowTo_CustomizeImageLayout".
+> The mono package is very large package. Without additional action it will not fit into the default file system!  See below and Check "Resize the the root partion of sd card".
 
 > ptxdist command "images" would not work!
 
@@ -46,16 +46,17 @@ $ptxdist clean mono
 4. Build package only
 ```
 $ptxdist targetinstall mono
-    ```
+```
 
-    Afterwards you should find the IPKG installer package file:
-        ~/wago/ptxproj/platform-wago-pfcXXX/packages/mono_6.4.0.198_armhf.ipk
+Afterwards you should find the IPKG installer package file:
+```
+~/wago/ptxproj/platform-wago-pfcXXX/packages/mono_6.4.0.198_armhf.ipk
+```
 
 # Install mono package on PFC
 
 ## Provide enough disk space in file system
 Without further action mono do not fit into default image.
-WBM-Feature "Create-Image" provide an easy way out ...
 
 1. Use the previously created `ptxdist image`
 
