@@ -21,7 +21,7 @@ This HowTo is / based on a clean installation of Ubuntu LTS, with an installed a
 ```
 $cp ./ptxproj/rules/kbusmodbusslave.in    ~/wago/ptxproj/rules/
 $cp ./ptxproj/rules/kbusmodbusslave.make  ~/wago/ptxproj/rules/
-$cp ./ptxproj/src/kbusmodbusslave-1.3.0.tar.bz2 ~/wago/ptxproj/src/
+$cp ./ptxproj/src/kbusmodbusslave-1.4.1.tar.bz2 ~/wago/ptxproj/src/
 ```
 
 2. Select "kbusmodbusslave" package for build
@@ -47,7 +47,7 @@ $ptxdist clean kbusmodbusslave
         $ptxdist targetinstall kbusmodbusslave
     ```
     Afterwards you should find the IPKG installer package file:
-        ~/wago/ptxproj/platform-wago-pfcXXX/packages/kbusmodbusslave_1.3.0_arm.ipk
+        ~/wago/ptxproj/platform-wago-pfcXXX/packages/kbusmodbusslave_1.4.1_arm.ipk
 
   2. Build complete firmware image "sd.hdimg"  (optional)
   ```
@@ -61,11 +61,67 @@ $ptxdist clean kbusmodbusslave
 
 As usual, you can:
 - copy image file "sd.hdimg" with command "dd" to SD-Card and boot PFC200 from it.
-- transfer package "kbusmodbusslave_1.3.0_arm.ipk" into PFC's file system and call "ipkg install <pkg-name>.ipk"
+- transfer package "kbusmodbusslave_1.4.1_arm.ipk" into PFC's file system and call "opkg install <pkg-name>.ipk"
 - utilize Web-Based-Management(WBM) feature "Software-Upload".
 
 ----------------------------------------------------------------------------------------------------------------------
-Using Web-Based-Management(WBM) feature "Software-Upload" for upload and installing OPKG packages
+# Using SSH for upload and installing OPKG package
+
+1. On development host
+```
+    $cd ~/wago/ptxroj/platform-wago-pfcXXX/packages/
+    $scp kbusmodbusslave_1.4.1_armhf.ipk root@<IP-of-PFC>:/root
+    root@<IP-of-PFC>'s password:  # Enter the root password (default: wago)
+    kbusmodbusslave_1.4.1_armhf.ipk               100%   23KB  23.3KB/s   00:00
+```
+
+2. On PFC
+Connect to PFC via SSH
+```
+    $ssh root@<IP-of-PFC>
+    root@<IP-of-PFC>'s password: #Enter the root password (default: wago)
+
+    WAGO Linux Terminal on PFC200V3-AABBCC
+
+    root@PFC200V3-AABBCC:
+```
+You are now connected to the PFC.
+Install kbusmodbusslave:
+```
+    $ opkg install kbusmodbusslave_1.4.1_armhf.ipk
+    Installing kbusmodbusslave (1.4.1) on root.
+    Configuring kbusmodbusslave.
+```
+Contratulations kbusmodbusslave is now installed on the PFC.
+Test it on PFC:
+```
+    $ /etc/init.d/runtime stop
+    Terminate CoDeSys v2.3...1403
+    Terminating CoDeSys v2.3, killing runtime ...done
+    $ kbusmodbusslave -v 7 --nodaemon
+
+    ======= CONFIGURATION =======
+    PORT: 502
+    MAX CONNECTIONS: 5
+    OPERATION MODE: 0
+    MODBUS DELAY MS: 0
+    KBUS CYCLE TIME MS: 50
+    KBUS PRIORITY: 60
+    ==============================
+    verbosity level is 7
+    Not running in background
+    kbusmodbusslave running...
+    ADI Device[0]: libpbdpm
+    Modbus: Wait for KBUS to be initialized
+    ADI Device[1]: libpackbus
+    Found kbus device on: 1
+    KBUS device open OK
+    KBUS set to application state: 1
+    [...]
+```
+
+----------------------------------------------------------------------------------------------------------------------
+# Using Web-Based-Management(WBM) feature "Software-Upload" for upload and installing OPKG packages
 
 1. Start your local browser, and navigate of PFC's default homepage(WBM)
 ```
@@ -81,7 +137,7 @@ Using Web-Based-Management(WBM) feature "Software-Upload" for upload and install
 3. Press button [Browser] to open the local file dialogue.
 ```
     Browse to attached folder "./packages/"
-    Select package to install or update, here "kbusmodbusslave_1.3.0_armhf.ipk".
+    Select package to install or update, here "kbusmodbusslave_1.4.1_armhf.ipk".
 ```
 
 4. Click on button [Start Upload].
@@ -92,7 +148,7 @@ Using Web-Based-Management(WBM) feature "Software-Upload" for upload and install
 ```
     Internally WBM just calls:
         >cd /home/
-        >opkg install kbusmodbusslave_1.3.0_armhf.ipk
+        >opkg install kbusmodbusslave_1.4.1_armhf.ipk
 ```
 
 6. Open a (ssh or serial) terminal session to PFC
@@ -155,7 +211,9 @@ Using Web-Based-Management(WBM) feature "Software-Upload" for upload and install
     Modbus ShortDesctiption Init
     Modbus-Init complete - Ready for take off
 ```
+
 9. Alternatively you can use netstat to check that modbus port 502 is open
+```
         root@PFC200-405C59:~ netstat -tl
         Active Internet connections (only servers)
         Proto Recv-Q Send-Q Local Address           Foreign Address         State
@@ -166,9 +224,10 @@ Using Web-Based-Management(WBM) feature "Software-Upload" for upload and install
         tcp        0      0 (null):502              (null):*                LISTEN
         tcp        0      0 (null):ssh              (null):*                LISTEN
         tcp        0      0 (null):https            (null):*                LISTEN
-
+```
 
 --------------------------------------------------------------------------------------
+
 # Enable auto start for "kbusmodbusslave"
 To start kbusmodbusslave on start-up apply following steps.
 
@@ -181,9 +240,9 @@ $scp ~/Downloads/HowTo_AddModbusPFCSlave/pfc/etc_init.d/kbusmodbusslave    root@
 2. Create symbolic link in /etc/rc.d/ for start-up kbusmodbusslave on power-on.
 
  Open a terminal session to PFC
-  ```
+```
   $ssh root@<IP-PFCX00>
-  ```
+``
   You need to enter the root password
 
   Now on PFC side, create the sym-link
@@ -208,9 +267,9 @@ $scp ~/Downloads/HowTo_AddModbusPFCSlave/pfc/etc_init.d/kbusmodbusslave    root@
    $rm S98_runtime
    ```
 5. Reboot PFC to test the autostart
-  ```
+```
    $reboot
-   ```
+```
 
 # Configuration file "/etc/kbusmodbusslave.conf"
 The file contains configuration information for kbusmodbusslave.
@@ -266,7 +325,7 @@ On a incomming modbus request a KBUS cycle is initiated. So that new data will b
 synchronously. The response will deliver updated KBUS-data. Also the KBUS and modbus data
 is updated cyclically, just to keep the output alive. (kbus_cycle_ms)
 
-~~~~
+```
 
                 +                                         +
                 |                                         | KBUS & modbus update
@@ -291,12 +350,12 @@ is updated cyclically, just to keep the output alive. (kbus_cycle_ms)
                 |                                         |
                 |                                         | t
                 +                                         v
-~~~~
+```
 
 **PRO:** Low Jitter
 
-**CONTRA:** Higher response time, because of Modbus+KBUS execution time.
-        More CPU power is needed.
+**CONTRA:** Higher response time, because of Modbus+KBUS execution time. More CPU power is needed.
+
 
 2. Asynchronus-Mode:
 On an incomming modbus request a KBUS a response is done immediately. The data will be
