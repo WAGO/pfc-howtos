@@ -242,12 +242,12 @@ $scp ~/Downloads/HowTo_AddModbusPFCSlave/pfc/etc_init.d/kbusmodbusslave    root@
  Open a terminal session to PFC
 ```
   $ssh root@<IP-PFCX00>
-``
+```
   You need to enter the root password
 
   Now on PFC side, create the sym-link
   ```
-  $ln -s /etc/init.d/kbusmodbusslave /etc/rc.d/S90_kbusmodbusslave
+  $ln -s /etc/init.d/kbusmodbusslave /etc/rc.d/S98_kbusmodbusslave
   ```
 
 3. Make /etc/init.d/kbusmodbusslave executable
@@ -267,9 +267,9 @@ $scp ~/Downloads/HowTo_AddModbusPFCSlave/pfc/etc_init.d/kbusmodbusslave    root@
    $rm S98_runtime
    ```
 5. Reboot PFC to test the autostart
-```
+   ```
    $reboot
-```
+   ```
 
 # Configuration file "/etc/kbusmodbusslave.conf"
 The file contains configuration information for kbusmodbusslave.
