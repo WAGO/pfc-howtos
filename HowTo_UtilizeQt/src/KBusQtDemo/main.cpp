@@ -14,7 +14,7 @@
 // include files for KBUS WAGO ADI
 //-----------------------------------------------------------------------------
 extern "C" {
-  #include <adi_application_interface.h>
+  #include <dal/adi_application_interface.h>
   #include <ldkc_kbus_information.h>
   #include <ldkc_kbus_register_communication.h>
 }
