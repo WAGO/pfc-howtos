@@ -66,8 +66,7 @@ no need to call “WatchdogTrigger()”.
 # Step by Step Ubuntu:
 ----------------------------------------------------------------------------
 
-## 0) Follow the steps in the Official Guide “https://github.com/WAGO/pfc-firmware-sdk” until
-## you reach step 6.)
+## 0) Follow the steps in the Official Guide “https://github.com/WAGO/pfc-firmware-sdk” until you reach step 6.)
 
 ## 1.0) Get the latest(desired) Qt-Version 
 
@@ -80,13 +79,11 @@ no need to call “WatchdogTrigger()”.
 ```
   Afterwards you need to call init_repository, optionally with the Modules you would like
   otherwise all modules will be downloaded
-  * [Qt-Source](https://wiki.qt.io/Get_the_Source) - Also see
+  -Also see * [Qt-Source](https://wiki.qt.io/Get_the_Source) 
 
-## 1.2) Copy the folder "linux-arm-PFCXXXX-g++" into the downloaded Qt Folder:
-        qtbase -> mkspecs -> devices
+## 1.2) Copy the folder "linux-arm-PFCXXXX-g++" into the downloaded Qt Folder: qtbase -> mkspecs -> devices
 
-## 1.1) Copy the file "qtbase/mkspecs/devices/linux-rasp-pi2-g++/" into the Folder we just created
-        "linux-arm-PFCXXXX-g++"
+## 1.1) Copy the file "qtbase/mkspecs/devices/linux-rasp-pi2-g++/" into the Folder we just created "linux-arm-PFCXXXX-g++"
         
   Copy the File from "qtbase/mkspecs/devices/linux-rasp-pi2-g++/qplatformdefs.h
   into the "linux-arm-PFCXXXX-g++ Folder.
