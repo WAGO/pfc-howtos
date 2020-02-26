@@ -60,7 +60,7 @@ $(STATEDIR)/binutils.targetinstall:
 	@$(call install_fixup, binutils,PRIORITY,optional)
 	@$(call install_fixup, binutils,SECTION,base)
 	@$(call install_fixup, binutils,AUTHOR,"Thomas Brandt <thomas.brandt@wago.com>")
-	@$(call install_fixup, binutils,DESCRIPTION,missing):w
+	@$(call install_fixup, binutils,DESCRIPTION,missing)
 
 ifdef PTXCONF_BINUTILS_READELF
 	@$(call install_copy, binutils, 0, 0, 0755, -, /usr/bin/readelf)
