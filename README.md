@@ -4,6 +4,7 @@
 
 | Name                               | for Version | Description |
 | :--------------------------------- | :---------- | :---------- |
+| AccessRetainVariables              | FW17   | Accessing retain variables using C or C++ |
 | AddPerfTool                        | FW12   | Adding perf tool |
 | AddTRDP                            | FW12   | Adding TRDP/TCNopen |
 | AddSQLiteCommandLineTool           | FW12   | Install the command-Line-Tool "sqlite3"|

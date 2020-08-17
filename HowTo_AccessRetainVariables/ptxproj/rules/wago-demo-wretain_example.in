@@ -1,0 +1,9 @@
+## SECTION=wago_specific_demo
+
+config WRETAIN_EXAMPLE
+	bool
+	prompt "Retain Variables API usage: C & C++"
+	select WRETAIN
+	help
+	  Examples of usage of Retain Variables API (C/C++).
+
