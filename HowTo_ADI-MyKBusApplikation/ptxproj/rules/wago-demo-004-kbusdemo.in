@@ -1,4 +1,4 @@
-## SECTION=wago_specific_demo
+## SECTION=wago_specific
 
 config KBUSDEMO
         bool
