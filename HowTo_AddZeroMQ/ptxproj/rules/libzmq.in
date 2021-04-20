@@ -1,0 +1,12 @@
+## SECTION=networking
+
+config LIBZMQ
+	tristate
+	prompt "libzmq"
+	help
+	  The zeroMQ lightweight messaging kernel is a library which extends the
+	  standard socket interfaces with features traditionally provided by
+	  specialised messaging middleware products. zeroMQ sockets provide an
+	  abstraction of asynchronous message queues, multiple messaging patterns,
+	  message filtering (subscriptions), seamless access to multiple transport
+	  protocols and more.
