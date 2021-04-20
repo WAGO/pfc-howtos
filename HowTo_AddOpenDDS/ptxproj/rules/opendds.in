@@ -1,0 +1,15 @@
+## SECTION=networking
+
+config OPENDDS
+	bool "OpenDDS"
+	help 
+    OpenDDS is an open source C++ implementation of the Object Management Group (OMG) Data Distribution Service (DDS). Java applications can use OpenDDS through JNI bindings. OpenDDS is supported by OCI and the source code is hosted on GitHub.
+
+if OPENDDS
+
+config OPENDDS_EXAMPLE
+	bool "OpenDDS-Example"
+	help
+	OpenDDS example applications
+
+endif

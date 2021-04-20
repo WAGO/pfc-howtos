@@ -15,9 +15,10 @@
 | KbusModbusSlave                    | FW14 | Adding KbusModbusSlave |
 | Mono                               | FW14   | Mono is a runtime implementation|
 | mosquittoBroker                    | FW12.1 | Adding a Mosquitto Broker |
+| OpenDDS                            | FW18   | Open source C++ implementation of DDS |
 | ReadOperatingModeSwitches          | FW12   | Reads out the switch position |
 | Ser2Net                            | FW13   | Serial to Network Proxy |
-| ZeroMQ                             | FW19   | High-performance asynchronous messaging library |
+| ZeroMQ                             | FW18   | High-performance asynchronous messaging library |
 
 ---
 
