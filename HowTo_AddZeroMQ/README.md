@@ -1,4 +1,4 @@
-# Add ZeroMQ library (libzmq-4.1.8)
+# Add ZeroMQ library (libzmq-4.3.4)
 
 ## This HowTo describes the procedure of compiling "libzmq" for PFC.
 

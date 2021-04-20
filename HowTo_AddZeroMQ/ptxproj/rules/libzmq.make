@@ -16,11 +16,11 @@ PACKAGES-$(PTXCONF_LIBZMQ) += libzmq
 #
 # Paths and names
 #
-LIBZMQ_VERSION		:= 4.1.8
-LIBZMQ_MD5		:= 6e5209f7e8cf969c69eab845d393bab6
+LIBZMQ_VERSION		:= 4.3.4
+LIBZMQ_MD5		:= c897d4005a3f0b8276b00b7921412379
 LIBZMQ			:= zeromq-$(LIBZMQ_VERSION)
 LIBZMQ_SUFFIX		:= tar.gz
-LIBZMQ_URL		:= https://github.com/zeromq/zeromq4-1/releases/download/v4.1.8/$(LIBZMQ).$(LIBZMQ_SUFFIX)
+LIBZMQ_URL		:= https://github.com/zeromq/libzmq/releases/download/v$(LIBZMQ_VERSION)/$(LIBZMQ).$(LIBZMQ_SUFFIX)
 LIBZMQ_SOURCE		:= $(SRCDIR)/$(LIBZMQ).$(LIBZMQ_SUFFIX)
 LIBZMQ_DIR		:= $(BUILDDIR)/$(LIBZMQ)
 LIBZMQ_LICENSE		:= LGPL-3.0+
