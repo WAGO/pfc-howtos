@@ -1,0 +1,402 @@
+From f65287855233d5c1c481f5fde8f9221182e7c5e3 Mon Sep 17 00:00:00 2001
+From: Thomas Brandt <Thomas.Brandt@wago.com>
+Date: Wed, 28 Apr 2021 14:45:04 +0200
+Subject: [PATCH] removePerlScriptAddShellScript
+
+---
+ .../DCPS/Messenger.minimal/run_test.pl        |  67 -----------
+ .../DCPS/Messenger.minimal/run_test.sh        |  32 +++++
+ DevGuideExamples/DCPS/Messenger/run_test.pl   | 113 ------------------
+ DevGuideExamples/DCPS/Messenger/run_test.sh   |  32 +++++
+ .../DCPS/Messenger_ZeroCopy/run_test.pl       |  67 -----------
+ .../DCPS/Messenger_ZeroCopy/run_test.sh       |  32 +++++
+ 6 files changed, 96 insertions(+), 247 deletions(-)
+ delete mode 100755 DevGuideExamples/DCPS/Messenger.minimal/run_test.pl
+ create mode 100755 DevGuideExamples/DCPS/Messenger.minimal/run_test.sh
+ delete mode 100755 DevGuideExamples/DCPS/Messenger/run_test.pl
+ create mode 100755 DevGuideExamples/DCPS/Messenger/run_test.sh
+ delete mode 100755 DevGuideExamples/DCPS/Messenger_ZeroCopy/run_test.pl
+ create mode 100755 DevGuideExamples/DCPS/Messenger_ZeroCopy/run_test.sh
+
+diff --git a/DevGuideExamples/DCPS/Messenger.minimal/run_test.pl b/DevGuideExamples/DCPS/Messenger.minimal/run_test.pl
+deleted file mode 100755
+index ecc93535..00000000
+--- a/DevGuideExamples/DCPS/Messenger.minimal/run_test.pl
++++ /dev/null
+@@ -1,67 +0,0 @@
+-eval '(exit $?0)' && eval 'exec perl -S $0 ${1+"$@"}'
+-    & eval 'exec perl -S $0 $argv:q'
+-    if 0;
+-
+-# -*- perl -*-
+-
+-use Env (DDS_ROOT);
+-use lib "$DDS_ROOT/bin";
+-use Env (ACE_ROOT);
+-use lib "$ACE_ROOT/bin";
+-use PerlDDS::Run_Test;
+-use strict;
+-
+-my $status = 0;
+-my $common_opts = "-ORBDebugLevel 10 -DCPSDebugLevel 10";
+-
+-my $pub_opts = "$common_opts -ORBLogFile publisher.log";
+-my $sub_opts = "$common_opts -DCPSTransportDebugLevel 6 " .
+-               "-ORBLogFile subscriber.log";
+-
+-my $dcpsrepo_ior = "repo.ior";
+-
+-unlink $dcpsrepo_ior;
+-
+-my $DCPSREPO = PerlDDS::create_process ("$ENV{DDS_ROOT}/bin/DCPSInfoRepo",
+-                                        "-ORBDebugLevel 10 " .
+-                                        "-ORBLogFile DCPSInfoRepo.log " .
+-                                        "-o $dcpsrepo_ior");
+-
+-my $Subscriber = PerlDDS::create_process ("subscriber", " $sub_opts");
+-my $Publisher = PerlDDS::create_process ("publisher", " $pub_opts");
+-
+-print $DCPSREPO->CommandLine() . "\n";
+-$DCPSREPO->Spawn ();
+-if (PerlACE::waitforfile_timed ($dcpsrepo_ior, 30) == -1) {
+-    print STDERR "ERROR: waiting for Info Repo IOR file\n";
+-    $DCPSREPO->Kill ();
+-    exit 1;
+-}
+-
+-print $Publisher->CommandLine() . "\n";
+-$Publisher->Spawn ();
+-
+-print $Subscriber->CommandLine() . "\n";
+-$Subscriber->Spawn ();
+-
+-my $PublisherResult = $Publisher->WaitKill (300);
+-if ($PublisherResult != 0) {
+-    print STDERR "ERROR: publisher returned $PublisherResult\n";
+-    $status = 1;
+-}
+-
+-my $SubscriberResult = $Subscriber->WaitKill (15);
+-if ($SubscriberResult != 0) {
+-    print STDERR "ERROR: subscriber returned $SubscriberResult\n";
+-    $status = 1;
+-}
+-
+-my $ir = $DCPSREPO->TerminateWaitKill(5);
+-if ($ir != 0) {
+-    print STDERR "ERROR: DCPSInfoRepo returned $ir\n";
+-    $status = 1;
+-}
+-
+-unlink $dcpsrepo_ior;
+-
+-exit $status;
+diff --git a/DevGuideExamples/DCPS/Messenger.minimal/run_test.sh b/DevGuideExamples/DCPS/Messenger.minimal/run_test.sh
+new file mode 100755
+index 00000000..601c8b46
+--- /dev/null
++++ b/DevGuideExamples/DCPS/Messenger.minimal/run_test.sh
+@@ -0,0 +1,32 @@
++#!/bin/sh
++
++PATH="."
++REPO_FILE="repo.ior"
++
++PUB_LOG="$PATH/publisher.log"
++SUB_LOG="$PATH/subscriber.log"
++DCPS_LOG="$PATH/dcpsInfoRepo.log"
++
++COMMON_OPTS="-ORBDebugLevel 10 -DCPSDebugLevel 10"
++PUB_OPTS="$COMMON_OPTS -ORBLogFile $PUB_LOG"
++SUB_OPTS="$COMMON_OPTS -DCPSTransportDebugLevel 6 -ORBLogFile $SUB_LOG"
++
++/bin/DCPSInfoRepo -ORBDebugLevel 10 -ORBLogFile $DCPS_LOG -o $REPO_FILE &
++DCPS_PID=$!
++
++#Wait 2 seconds
++/bin/sleep 2
++#loop till repofile exists
++while ! test -f "$REPO_FILE"; do
++  /bin/sleep 1
++  echo "Still waiting"
++done
++
++$PATH/publisher $PUB_OPTS &
++
++$PATH/subscriber $SUB_OPTS
++
++kill $DCPS_PID
++/bin/rm $REPO_FILE
++echo ..:: EXIT ::..
++
+diff --git a/DevGuideExamples/DCPS/Messenger/run_test.pl b/DevGuideExamples/DCPS/Messenger/run_test.pl
+deleted file mode 100755
+index b7b0fe7b..00000000
+--- a/DevGuideExamples/DCPS/Messenger/run_test.pl
++++ /dev/null
+@@ -1,113 +0,0 @@
+-eval '(exit $?0)' && eval 'exec perl -S $0 ${1+"$@"}'
+-    & eval 'exec perl -S $0 $argv:q'
+-    if 0;
+-
+-# -*- perl -*-
+-
+-use Env (DDS_ROOT);
+-use lib "$DDS_ROOT/bin";
+-use Env (ACE_ROOT);
+-use lib "$ACE_ROOT/bin";
+-
+-use Getopt::Long;
+-use PerlDDS::Run_Test;
+-
+-use strict;
+-
+-my $status = 0;
+-
+-my $rtps = 0;
+-my $help = 0;
+-
+-my $help_message = "usage: run_test.pl [-h|--help] [--rtps]\n";
+-if (not GetOptions(
+-  "rtps" => \$rtps,
+-  "help|h" => \$help
+-)) {
+-  print STDERR ("Invalid Command Line Argument(s)\n$help_message");
+-}
+-if ($help) {
+-  print $help_message;
+-  exit 0;
+-}
+-
+-unlink "subscriber.log";
+-unlink "publisher.log";
+-
+-my $common_opts = "-ORBDebugLevel 10 -DCPSDebugLevel 10";
+-
+-if ($rtps) {
+-  $common_opts .= " -DCPSConfigFile rtps.ini";
+-}
+-
+-my $pub_opts = "$common_opts -ORBLogFile publisher.log";
+-my $sub_opts = "$common_opts -DCPSTransportDebugLevel 6 " .
+-               "-ORBLogFile subscriber.log";
+-
+-my $DCPSREPO;
+-my $dcpsrepo_ior = "repo.ior";
+-
+-my $subdir = $PerlACE::Process::ExeSubDir;
+-my $filename = "subscriber";
+-my $filename_exe = "subscriber.exe";
+-if (!(-e $subdir.$filename) && !(-e $subdir.$filename_exe)) {
+-    print STDERR "ERROR: subscriber does not exist. Subdir: $subdir\n";
+-    exit 1;
+-}
+-$filename = 'publisher';
+-$filename_exe = "publisher.exe";
+-if (!(-e $subdir.$filename) && !(-e $subdir.$filename_exe)) {
+-    print STDERR "ERROR: publisher does not exist. Subdir: $subdir\n";
+-    exit 1;
+-}
+-
+-my $Subscriber = PerlDDS::create_process("subscriber", " $sub_opts");
+-my $Publisher = PerlDDS::create_process("publisher", " $pub_opts");
+-
+-if (not $rtps) {
+-  unlink $dcpsrepo_ior;
+-
+-  $DCPSREPO = PerlDDS::create_process(
+-    "$ENV{DDS_ROOT}/bin/DCPSInfoRepo",
+-    "-ORBDebugLevel 10 " .
+-    "-ORBLogFile DCPSInfoRepo.log " .
+-    "-o $dcpsrepo_ior");
+-
+-  print $DCPSREPO->CommandLine() . "\n";
+-  $DCPSREPO->Spawn();
+-  if (PerlACE::waitforfile_timed($dcpsrepo_ior, 30) == -1) {
+-    print STDERR "ERROR: waiting for Info Repo IOR file\n";
+-    $DCPSREPO->Kill();
+-    exit 1;
+-  }
+-}
+-
+-print $Publisher->CommandLine() . "\n";
+-$Publisher->Spawn();
+-
+-print $Subscriber->CommandLine() . "\n";
+-$Subscriber->Spawn();
+-
+-my $PublisherResult = $Publisher->WaitKill(300);
+-if ($PublisherResult != 0) {
+-  print STDERR "ERROR: publisher returned $PublisherResult\n";
+-  $status = 1;
+-}
+-
+-my $SubscriberResult = $Subscriber->WaitKill(15);
+-if ($SubscriberResult != 0) {
+-  print STDERR "ERROR: subscriber returned $SubscriberResult\n";
+-  $status = 1;
+-}
+-
+-if (not $rtps) {
+-  my $ir = $DCPSREPO->TerminateWaitKill(5);
+-  if ($ir != 0) {
+-    print STDERR "ERROR: DCPSInfoRepo returned $ir\n";
+-    $status = 1;
+-  }
+-
+-  unlink $dcpsrepo_ior;
+-}
+-
+-exit $status;
+diff --git a/DevGuideExamples/DCPS/Messenger/run_test.sh b/DevGuideExamples/DCPS/Messenger/run_test.sh
+new file mode 100755
+index 00000000..601c8b46
+--- /dev/null
++++ b/DevGuideExamples/DCPS/Messenger/run_test.sh
+@@ -0,0 +1,32 @@
++#!/bin/sh
++
++PATH="."
++REPO_FILE="repo.ior"
++
++PUB_LOG="$PATH/publisher.log"
++SUB_LOG="$PATH/subscriber.log"
++DCPS_LOG="$PATH/dcpsInfoRepo.log"
++
++COMMON_OPTS="-ORBDebugLevel 10 -DCPSDebugLevel 10"
++PUB_OPTS="$COMMON_OPTS -ORBLogFile $PUB_LOG"
++SUB_OPTS="$COMMON_OPTS -DCPSTransportDebugLevel 6 -ORBLogFile $SUB_LOG"
++
++/bin/DCPSInfoRepo -ORBDebugLevel 10 -ORBLogFile $DCPS_LOG -o $REPO_FILE &
++DCPS_PID=$!
++
++#Wait 2 seconds
++/bin/sleep 2
++#loop till repofile exists
++while ! test -f "$REPO_FILE"; do
++  /bin/sleep 1
++  echo "Still waiting"
++done
++
++$PATH/publisher $PUB_OPTS &
++
++$PATH/subscriber $SUB_OPTS
++
++kill $DCPS_PID
++/bin/rm $REPO_FILE
++echo ..:: EXIT ::..
++
+diff --git a/DevGuideExamples/DCPS/Messenger_ZeroCopy/run_test.pl b/DevGuideExamples/DCPS/Messenger_ZeroCopy/run_test.pl
+deleted file mode 100755
+index 8f500d58..00000000
+--- a/DevGuideExamples/DCPS/Messenger_ZeroCopy/run_test.pl
++++ /dev/null
+@@ -1,67 +0,0 @@
+-eval '(exit $?0)' && eval 'exec perl -S $0 ${1+"$@"}'
+-    & eval 'exec perl -S $0 $argv:q'
+-    if 0;
+-
+-# -*- perl -*-
+-
+-use Env (DDS_ROOT);
+-use lib "$DDS_ROOT/bin";
+-use Env (ACE_ROOT);
+-use lib "$ACE_ROOT/bin";
+-use PerlDDS::Run_Test;
+-use strict;
+-
+-my $status = 0;
+-my $common_opts = "-ORBDebugLevel 10 -DCPSDebugLevel 10";
+-
+-my $pub_opts = "$common_opts -ORBLogFile publisher.log";
+-my $sub_opts = "$common_opts -DCPSTransportDebugLevel 6 " .
+-               "-ORBLogFile subscriber.log";
+-
+-my $dcpsrepo_ior = "repo.ior";
+-
+-unlink $dcpsrepo_ior;
+-
+-my $DCPSREPO = PerlDDS::create_process ("$ENV{DDS_ROOT}/bin/DCPSInfoRepo",
+-                                        "$common_opts " .
+-                                        "-ORBLogFile DCPSInfoRepo.log " .
+-                                        "-o $dcpsrepo_ior ");
+-
+-my $Subscriber = PerlDDS::create_process ("subscriber", " $sub_opts");
+-my $Publisher = PerlDDS::create_process ("publisher", " $pub_opts");
+-
+-print $DCPSREPO->CommandLine() . "\n";
+-$DCPSREPO->Spawn ();
+-if (PerlACE::waitforfile_timed ($dcpsrepo_ior, 30) == -1) {
+-    print STDERR "ERROR: waiting for Info Repo IOR file\n";
+-    $DCPSREPO->Kill ();
+-    exit 1;
+-}
+-
+-print $Publisher->CommandLine() . "\n";
+-$Publisher->Spawn ();
+-
+-print $Subscriber->CommandLine() . "\n";
+-$Subscriber->Spawn ();
+-
+-my $PublisherResult = $Publisher->WaitKill (300);
+-if ($PublisherResult != 0) {
+-    print STDERR "ERROR: publisher returned $PublisherResult\n";
+-    $status = 1;
+-}
+-
+-my $SubscriberResult = $Subscriber->WaitKill (15);
+-if ($SubscriberResult != 0) {
+-    print STDERR "ERROR: subscriber returned $SubscriberResult\n";
+-    $status = 1;
+-}
+-
+-my $ir = $DCPSREPO->TerminateWaitKill(5);
+-if ($ir != 0) {
+-    print STDERR "ERROR: DCPSInfoRepo returned $ir\n";
+-    $status = 1;
+-}
+-
+-unlink $dcpsrepo_ior;
+-
+-exit $status;
+diff --git a/DevGuideExamples/DCPS/Messenger_ZeroCopy/run_test.sh b/DevGuideExamples/DCPS/Messenger_ZeroCopy/run_test.sh
+new file mode 100755
+index 00000000..601c8b46
+--- /dev/null
++++ b/DevGuideExamples/DCPS/Messenger_ZeroCopy/run_test.sh
+@@ -0,0 +1,32 @@
++#!/bin/sh
++
++PATH="."
++REPO_FILE="repo.ior"
++
++PUB_LOG="$PATH/publisher.log"
++SUB_LOG="$PATH/subscriber.log"
++DCPS_LOG="$PATH/dcpsInfoRepo.log"
++
++COMMON_OPTS="-ORBDebugLevel 10 -DCPSDebugLevel 10"
++PUB_OPTS="$COMMON_OPTS -ORBLogFile $PUB_LOG"
++SUB_OPTS="$COMMON_OPTS -DCPSTransportDebugLevel 6 -ORBLogFile $SUB_LOG"
++
++/bin/DCPSInfoRepo -ORBDebugLevel 10 -ORBLogFile $DCPS_LOG -o $REPO_FILE &
++DCPS_PID=$!
++
++#Wait 2 seconds
++/bin/sleep 2
++#loop till repofile exists
++while ! test -f "$REPO_FILE"; do
++  /bin/sleep 1
++  echo "Still waiting"
++done
++
++$PATH/publisher $PUB_OPTS &
++
++$PATH/subscriber $SUB_OPTS
++
++kill $DCPS_PID
++/bin/rm $REPO_FILE
++echo ..:: EXIT ::..
++
+-- 
+2.31.1
+

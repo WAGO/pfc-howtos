@@ -12,14 +12,12 @@ Working means that you successfully built the standard image “sd.hdimg”.
 ## 1) On development host (Ubuntu)
 ### 1.1) Copy attached rule file, sources and patches for "opendds" to given folder:
 ```
-$cp ./ptxproj/rules/opendds.in    ~/wago/ptxproj-2.5.23/rulees/
-$cp ./ptxproj/rules/opendds.make  ~/wago/ptxproj-2.5.23/rules/
-$cp -r ./ptxproj/patches/OpenDDS-3.16 ~/wago/ptxproj-2.5.23/patches/
-$cp ./ptxproj/src/OpenDDS-3.16.tar.bz2 ~/wago/ptxproj-2.5.23/src/
+$cp ./ptxproj/rules/* ~/<ptxproj>/rules/
+$cp -r ./ptxproj/patches/OpenDDS-3.16 ~/<ptxproj>/patches/
 ```
 ### 1.2) Select "opendds" package for build
 ```
-        $cd ~/wago/ptxproj-2.5.23/
+        $cd ~/<ptxproj>
         $ptxdist menuconfig
             Networking Tools                ---> [ENTER]
             [*] OpenDDS
@@ -29,7 +27,7 @@ $cp ./ptxproj/src/OpenDDS-3.16.tar.bz2 ~/wago/ptxproj-2.5.23/src/
 ```
 ### 1.3) Clean the package
 ```
-        $cd ~/wago/ptxproj-2.5.23
+        $cd ~/<ptxproj>
         $ptxdist clean opendds
 ```
 ### 1.4) Build package only
@@ -84,7 +82,7 @@ $cd /usr/share/OpenDDS/
 
         $./run_test.sh
 
-3) Expected output:
+## 3) Expected output:
 ```
 	TAO (486|3048595456) - Completed initializing the process-wide service context
 	TAO (486|3048595456) - Default ORB services initialization begins
