@@ -44,3 +44,24 @@ adds crontab entry, to download the file each month.
 `SSL_CERT_FILE` that is used by cURL to locate CA bundle file.
 
 This path `/etc/ssl/certs/cacert.pem` can be also used in your firmware.
+
+| PFC | Compatible |
+|:-------------|:------------:|
+| **PFC 100** | |
+| 750-8100 | Y |
+| 750-8101 | Y |
+| 750-8102 | Y |
+|  |  |
+| **PFC 200** | |
+| 750-8202 | Y |
+| 750-8203 | Y |
+| 750-8204 | Y |
+| 750-8206 | Y |
+| 750-8207 | Y |
+| 750-8208 | Y |
+|  |  |
+| **PFC 200 G2** | |
+| 750-8212 | Y |
+| 750-8213 | Y |
+| 750-8214 | Y |
+| 750-8216 | Y |
