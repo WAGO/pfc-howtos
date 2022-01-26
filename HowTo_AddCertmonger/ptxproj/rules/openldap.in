@@ -1,0 +1,49 @@
+## SECTION=networking
+
+menuconfig OPENLDAP
+	tristate
+	prompt "openldap                      "
+	select ZLIB
+	select LIBC_RESOLV
+	select LIBC_PTHREAD
+	select OPENSSL		if OPENLDAP_TLS_OPENSSL
+	select GNUTLS		if OPENLDAP_TLS_GNUTLS
+	help
+	  OpenLDAP Software is an open source implementation of the Lightweight
+	  Directory Access Protocol. The suite includes:
+
+	    - slapd: stand-alone LDAP daemon (server)
+	    - libraries implementing the LDAP protocol, and
+	    - utilities, tools, and sample clients.
+
+if OPENLDAP
+
+config OPENLDAP_SLAPD
+	bool
+	prompt "slapd support"
+	help
+	  Enable/disable building and installation of slapd (the server).
+
+choice
+	prompt "TLS/SSL support               "
+
+	config OPENLDAP_TLS_DISABLED
+		bool "disabled"
+
+	config OPENLDAP_TLS_OPENSSL
+		bool "openssl"
+
+	config OPENLDAP_TLS_GNUTLS
+		depends on BROKEN
+		bool "gnutls"
+
+endchoice
+
+config OPENLDAP_INSTALL_UTILITIES
+	bool
+	prompt "install utilities"
+	help
+	  Installs various utilities: ldapadd, ldapcompare, ldapdelete, ldapexop,
+	  ldapmodify, ldapmodrdn, ldappasswd, ldapsearch, ldapurl, ldapwhoami.
+
+endif

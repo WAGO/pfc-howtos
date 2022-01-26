@@ -1,0 +1,8 @@
+## SECTION=system_libraries
+
+config TEVENT
+	bool
+	prompt "tevent"
+	select TALLOC
+	help
+	  event system based on the talloc memory management library

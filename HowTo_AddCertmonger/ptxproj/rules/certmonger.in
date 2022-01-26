@@ -1,0 +1,17 @@
+## SECTION=networking
+
+config CERTMONGER
+	bool
+	select TALLOC
+	select TEVENT
+	select DBUS
+	select NSS
+	select LIBXML2
+	select LIBCURL
+	select JANSSON
+	select KRB5
+	select OPENLDAP
+	select LIBPOPT
+	prompt "certmonger"
+	help
+	  The certmonger daemon monitors certificates for impending expiration, and can optionally refresh soon-to-be-expired certificates with the help of a CA.

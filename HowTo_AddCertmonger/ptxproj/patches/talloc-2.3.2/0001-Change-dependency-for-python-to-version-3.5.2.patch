@@ -1,0 +1,26 @@
+From d75ec13a6ed8b864f0524827f268a8dedc4325df Mon Sep 17 00:00:00 2001
+From: Thomas Brandt <Thomas.Brandt@wago.com>
+Date: Tue, 25 Jan 2022 13:27:02 +0100
+Subject: [PATCH 1/1] Change dependency for python to version 3.5.2
+
+Signed-off-by: Thomas Brandt <Thomas.Brandt@wago.com>
+---
+ buildtools/wafsamba/samba_python.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/buildtools/wafsamba/samba_python.py b/buildtools/wafsamba/samba_python.py
+index 002357b..05b7bbc 100644
+--- a/buildtools/wafsamba/samba_python.py
++++ b/buildtools/wafsamba/samba_python.py
+@@ -5,7 +5,7 @@ from waflib import Build, Logs, Utils, Configure, Errors
+ from waflib.Configure import conf
+ 
+ @conf
+-def SAMBA_CHECK_PYTHON(conf, version=(3,6,0)):
++def SAMBA_CHECK_PYTHON(conf, version=(3,5,2)):
+ 
+     if conf.env.enable_fuzzing:
+         version=(3,5,0)
+-- 
+2.34.1
+
