@@ -1,6 +1,6 @@
 # -*-makefile-*-
 #
-# Copyright (C) 2017 by <wago.com>
+# Copyright (C) 2022 by WAGO GmbH & Co. KG. <Thomas.Brandt@wago.com>
 #
 # See CREDITS for details about who has contributed to this project.
 #
@@ -17,11 +17,11 @@ PACKAGES-$(PTXCONF_KBUSMODBUSSLAVE) += kbusmodbusslave
 # Paths and names
 #
 KBUSMODBUSSLAVE			:= kbusmodbusslave
-KBUSMODBUSSLAVE_VERSION	:= 1.4.1
+KBUSMODBUSSLAVE_VERSION	:= 1.5.0
 KBUSMODBUSSLAVE_SOURCE	:= $(SRCDIR)/$(KBUSMODBUSSLAVE)-$(KBUSMODBUSSLAVE_VERSION).tar.bz2
 KBUSMODBUSSLAVE_DIR		:= $(BUILDDIR)/$(KBUSMODBUSSLAVE)
 KBUSMODBUSSLAVE_LICENSE	:= MPL_2.0
-KBUSMODBUSSLAVE_MD5		:= 62bd7b145313cd6419d7ee98711bc2fa
+KBUSMODBUSSLAVE_MD5		:= 51d097efe050cb8d8143bc68bbe85035
 
 # ----------------------------------------------------------------------------
 # Get
@@ -70,7 +70,7 @@ $(STATEDIR)/kbusmodbusslave.targetinstall:
 	@$(call install_fixup, kbusmodbusslave,PRIORITY,optional)
 	@$(call install_fixup, kbusmodbusslave,VERSION,$(KBUSMODBUSSLAVE_VERSION))
 	@$(call install_fixup, kbusmodbusslave,SECTION,base)
-	@$(call install_fixup, kbusmodbusslave,AUTHOR,"BrT")
+	@$(call install_fixup, kbusmodbusslave,AUTHOR,"Thomas.Brandt@wago.com")
 	@$(call install_fixup, kbusmodbusslave,DESCRIPTION,missing)
 	@$(call install_copy,  kbusmodbusslave, 0, 0, 0755, $(KBUSMODBUSSLAVE_DIR)/$(KBUSMODBUSSLAVE), /usr/bin/$(KBUSMODBUSSLAVE))
 	@$(call install_copy,  kbusmodbusslave, 0, 0, 0644, $(KBUSMODBUSSLAVE_DIR)/kbusmodbusslave.conf, /etc/kbusmodbusslave.conf)
