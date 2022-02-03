@@ -15,7 +15,6 @@ Working means that you successfully built the standard image “sd.hdimg”.
 # Installation and usage
 
 ## 1) On development host (Ubuntu)
-### 1.1.1 sudo apt install libparse-yapp-perl
 ### 1.1) Copy rule and patch files to your ptxdist-project directory
 ```
 >cp -v ptxproj/rules/* ~/<ptxproj>/rules/
