@@ -10,9 +10,9 @@
 # Short-Description:    kbusmodbusslave initialisation
 ### END INIT INFO
 
-DAEMON_PATH="/bin"
+DAEMON_PATH="/usr/bin"
 DAEMON="kbusmodbusslave"
-DAEMONOPTS="-d"
+DAEMONOPTS=""
 
 NAME=kbusmodbusslave
 DESC="KBUS Modbus Slave for PFC"
@@ -23,7 +23,8 @@ SCRIPTNAME=/etc/init.d/$NAME
 case "$1" in
 start)
     printf "%-50s" "Starting $NAME..."
-    PID=`$DAEMON_PATH/$DAEMON $DAEMONOPTS > /dev/null 2>&1 & echo $!`
+    cd $DAEMON_PATH
+    PID=`$DAEMON $DAEMONOPTS > /dev/null 2>&1 & echo $!`
     #echo "Saving PID" $PID " to " $PIDFILE
     if [ -z $PID ]; then
         printf "%s\n" "Fail"
