@@ -1,0 +1,33 @@
+## SECTION=wago_specific_demo
+
+config REGISTER_ACCESS_65X_DEMO
+    bool
+	prompt "KBUS register access demo"	
+	select LIBKBUS_REGISTER_SETTINGS
+	help
+	  Demo Program for configuring serial terminals via adi/dal + libpackbus
+
+if REGISTER_ACCESS_65X_DEMO
+
+config REGISTER_ACCESS_65X_DEMO_DEBUG
+	bool
+	default y
+	prompt "debug build"
+	help
+		build with additional debug info and without optimisations
+
+choice
+	prompt "static/dynamic linking"
+
+config REGISTER_ACCESS_65X_DEMO_SHARED
+	bool
+	select LIBKBUS_REGISTER_SETTINGS_SHARED
+	prompt "link against shared kbus-register-settings library"
+
+config REGISTER_ACCESS_65X_DEMO_STATIC
+	bool
+	select LIBKBUS_REGISTER_SETTINGS_STATIC
+	prompt "link against static kbus-register-settings library"
+
+endchoice
+endif

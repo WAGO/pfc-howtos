@@ -1,0 +1,21 @@
+## SECTION=wago_specific
+
+config LIBKBUS_REGISTER_SETTINGS
+	bool
+	prompt "KBUS register access library (precompiled)"	
+	select DAL
+	select LIBPACKBUS
+	help
+	  C library for configuring serial terminals via adi/dal + libpackbus
+
+if LIBKBUS_REGISTER_SETTINGS
+config LIBKBUS_REGISTER_SETTINGS_SHARED
+	bool
+	default y
+	prompt "install shared library"
+
+config LIBKBUS_REGISTER_SETTINGS_STATIC
+	bool
+	default n
+	prompt "install static library"
+endif

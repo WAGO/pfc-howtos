@@ -21,6 +21,8 @@
 | ReadOperatingModeSwitches          | FW12   | Reads out the switch position |
 | Ser2Net                            | FW13   | Serial to Network Proxy |
 | ZeroMQ                             | FW18   | High-performance asynchronous messaging library |
+| Libkbus-register-settings          | FW20.1 | Precompiled version of kbus-register-settings |
+| Register-access-65x-demo           | FW20.1 | Demo usage of the `libkbus-register-settings` library |
 
 ---
 
