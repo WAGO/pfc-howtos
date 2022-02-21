@@ -1,0 +1,7 @@
+## SECTION=wago_specific_demo
+
+config KBUSDEMO652
+        bool
+	prompt "KBUS demo on using 750-652"	
+	help
+	  Demo Programs for using serial terminal 750-652 

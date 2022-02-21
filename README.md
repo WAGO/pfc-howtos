@@ -9,6 +9,7 @@
 | AddTRDP                            | FW12   | Adding TRDP/TCNopen |
 | AddSQLiteCommandLineTool           | FW12   | Install the command-Line-Tool "sqlite3"|
 | ADI-MyKBusApplikation              | FW12   | Demo C Application for KBUS |
+| ADI-DALwithSerialTerminal750-652   | FW20.1 | Utilize serial terminal 750-652 via DAL/ADI |
 | AutoCopySD-CardImage2InternalFlash | FW12   | Automaticaly copies SD card image to internal flash |
 | BuildRustExecubaled                | FW17   | Cross-compile RUST executables |
 | Certmonger                         | FW20.1 | Daemon monitors certificates for impending expiration |
