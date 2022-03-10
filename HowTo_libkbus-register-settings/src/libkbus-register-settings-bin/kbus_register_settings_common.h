@@ -1,8 +1,6 @@
 #ifndef KBUS_REGISTER_SETTINGS_COMMON_H
 #define KBUS_REGISTER_SETTINGS_COMMON_H
 
-#include <stdint.h>
-
 /**
  * @file 
  *
@@ -15,7 +13,11 @@
  *
  * @warning Make sure that the content of the arrays matches the discrimantors of the respective enums.
  * @endinternal
+ *
+ * @author F. Warzecha: WAGO Kontakttechnik GmbH & Co. KG
  */
+
+#include <stdint.h>
 
 /**
  * @brief Error variants returned when writing/reading setting values.
@@ -86,6 +88,14 @@ typedef enum {
      * @brief A setting from #KbusRegConfigurationSet could not be applied.
      */
     KBUS_REG_ERR_SETTING = 7, 
+    /**
+     * @brief The terminal type is known, but the hardware version of the terminal is not supported.
+     */
+    KBUS_REG_COM_UNSUPPORTED_HARDWARE_VERSION = 8,
+    /**
+     * @brief The terminal type is known and has a supported hardware version, but the software version on the terminal is not supported.
+     */
+    KBUS_REG_COM_UNSUPPORTED_SOFTWARE_VERSION = 9,
 } KbusRegErrStatus;
 
 /**
@@ -107,6 +117,15 @@ typedef struct {
 } KbusRegErr;
 
 /**
+ * @brief Software version of a terminal.
+ */
+typedef struct {
+    uint8_t patch;
+    uint8_t minor;
+    uint8_t major;
+} KbusRegTerminalSoftwareVersion;
+
+/**
  * @brief Detailed representation of a terminal type.
  */
 typedef struct {
@@ -114,6 +133,7 @@ typedef struct {
     uint16_t value;
     uint16_t spec1;
     uint16_t spec2;
+    uint8_t hardware_version;
 } KbusRegTerminalInfo;
 
 /**
@@ -123,14 +143,25 @@ const static char __attribute__((unused)) *KBUS_REG_TERMINAL_TYPES[] = {
     "Unknown",
     "750-650/003-000",
     "750-652",
+    "750-493",
 };
 
 /**
  * @brief Implemented terminal types.
  */
 typedef enum {
+    /**
+     * Supported SW/HW versions: all
+     */
     KBUS_REG_TERMINAL_750_650_003 = 1,
+    /**
+     * Supported SW/HW versions: all
+     */
     KBUS_REG_TERMINAL_750_652 = 2,
+    /**
+     * Supported SW/HW versions: SW >= 1.1.75; HW >= 20
+     */
+    KBUS_REG_TERMINAL_750_493 = 3,
 } KbusRegTerminalType;
 
 /**
@@ -142,6 +173,15 @@ struct sKbusRegTerminal;
  * @see #sKbusRegTerminal
  */
 typedef struct sKbusRegTerminal KbusRegTerminal;
+
+/**
+ * @brief Available phases of 3phase measurment modules (e. g. 750-493).
+ */
+typedef enum {
+    KBUS_REG_PHASE_L1,
+    KBUS_REG_PHASE_L2,
+    KBUS_REG_PHASE_L3,
+} KbusRegPhase;
 
 /**
  * @brief String representation of #KbusRegOperatingMode.
@@ -396,5 +436,160 @@ typedef enum {
     KBUS_REG_COPY_STATUSBYTE_DIRECT = 1,
     KBUS_REG_COPY_STATUSBYTE_DELAYED = 2,
 } KbusRegCopyStatusbyte;
+
+/**
+ * @brief String representation of #KbusRegUserScaling.
+ */
+const static char __attribute__((unused)) *KBUS_REG_USER_SCALING[] = {
+    "Unknown",
+    "disabled",
+    "enabled",
+};
+
+/**
+ * @brief User scaling setting of power measurement modules.
+ */
+typedef enum {
+    KBUS_REG_USER_SCALING_DISABLED = 1,
+    KBUS_REG_USER_SCALING_ENABLED = 2,
+} KbusRegUserScaling;
+
+/**
+ * @brief String representation of #KbusRegWatchdogTimer.
+ */
+const static char __attribute__((unused)) *KBUS_REG_WATCHDOG_TIMER[] = {
+    "Unknown",
+    "enabled",
+    "disabled",
+};
+
+/**
+ * @brief Watchdog timer setting of power measurement modules.
+ */
+typedef enum {
+    KBUS_REG_WATCHDOG_TIMER_ENABLED = 1,
+    KBUS_REG_WATCHDOG_TIMER_DISABLED = 2,
+} KbusRegWatchdogTimer;
+
+/**
+ * @brief String representation of #KbusRegProcessImage.
+ */
+const static char __attribute__((unused)) *KBUS_REG_PROCESS_IMAGE[] = {
+    "Unknown",
+    "simple", // TODO could also use compat here or simple/compat (though I'm not certain I want to have things such as '/' in the string, to keep them easily parsable)
+    "flexible",
+};
+
+/**
+ * @brief Process image setting of power measurement modules.
+ */
+typedef enum {
+    KBUS_REG_PROCESS_IMAGE_SIMPLE = 1,
+    KBUS_REG_PROCESS_IMAGE_FLEXIBLE = 2,
+} KbusRegProcessImage;
+
+/**
+ * @brief String representation of #KbusRegDcFilter.
+ */
+const static char __attribute__((unused)) *KBUS_REG_DC_FILTER[] = {
+    "Unknown",
+    "bypassed",
+    "activated",
+};
+
+/**
+ * @brief DC filter settings for power measurement modules.
+ */
+typedef enum {
+    KBUS_REG_DC_FILTER_BYPASSED = 1,
+    KBUS_REG_DC_FILTER_ACTIVATED = 2,
+} KbusRegDcFilter;
+
+/**
+ * @brief String representation of #KbusRegEnergySign.
+ */
+const static char __attribute__((unused)) *KBUS_REG_ENERGY_SIGN[] = {
+    "Unknown",
+    "not inverted",
+    "inverted",
+};
+
+/**
+ * @brief Energy consumption invert setting for power measurement modules.
+ */
+typedef enum {
+    KBUS_REG_ENERGY_SIGN_NOT_INVERTED = 1,
+    KBUS_REG_ENERGY_SIGN_INVERTED = 2,
+} KbusRegEnergySign;
+
+/**
+ * @brief String representation of #KbusRegClearMinMaxValues.
+ */
+const static char __attribute__((unused)) *KBUS_REG_CLEAR_MIX_MAX_VALUES[] = {
+    "Unknown",
+    "deactivated",
+    "activated",
+};
+
+/**
+ * @brief Automatic clearing min/max values of power measurement modules.
+ */
+typedef enum {
+    KBUS_REG_CLEAR_MIN_MAX_VALUES_DEACTIVATED = 1,
+    KBUS_REG_CLEAR_MIN_MAX_VALUES_ACTIVATED = 2,
+} KbusRegClearMinMaxValues;
+
+/**
+ * @brief String representation of #KbusRegEnergyMeasurementScaling (750-49X variant, e. g. 1Wh).
+ */
+const static char __attribute__((unused)) *KBUS_REG_ENERGY_MEASUREMENT_SCALING_1A[] = {
+    "Unknown",
+    "1 mWh",
+    "0.01 Wh",
+    "0.1 Wh",
+    "1 Wh",
+    "0.01 kWh",
+    "0.1 kWh",
+    "1 kWh",
+};
+
+/**
+ * @brief String representation of #KbusRegEnergyMeasurementScaling (750-49X/000-001 variant, e. g. 5Wh).
+ */
+const static char __attribute__((unused)) *KBUS_REG_ENERGY_MEASUREMENT_SCALING_5A[] = {
+    "Unknown",
+    "5 mWh",
+    "0.05 Wh",
+    "0.5 Wh",
+    "5 Wh",
+    "0.05 kWh",
+    "0.5 kWh",
+    "5 kWh",
+};
+
+/**
+ * @brief Scaling factors for measuring energy (3-phase power measurment terminals).
+ *
+ * Values with the same order of magnitude represent the same setting (e. g. 1A_1mWh is the same as 5A_5mWh). 
+ * Both values exist, due to slight differences in the scaling. 
+ * E. g. the 750-493 model allows for up to 1A and has scaling values with multiple of 1Wh, while
+ * the 750-493/000-001 has the exact same orders of magnitude, the difference simply being the base of 5Wh.
+ */
+typedef enum {
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_1A_1mWh = 1,
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_5A_5mWh = 1,
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_1A_10mWh = 2,
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_5A_50mWh = 2,
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_1A_100mWh = 3,
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_5A_500mWh = 3,
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_1A_1Wh = 4,
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_5A_5Wh = 4,
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_1A_10Wh = 5,
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_5A_50Wh = 5,
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_1A_100Wh = 6,
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_5A_500Wh = 6,
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_1A_1kWh = 7,
+    KBUS_REG_ENERGY_MEASUREMENT_SCALING_5A_5kWh = 7,
+} KbusRegEnergyMeasurementScaling;
 
 #endif /* KBUS_REGISTER_SETTINGS_COMMON_H */

@@ -18,7 +18,11 @@ copy: build
 	@echo Copying shared library and headers [if this fails, make sure both static and shared build is selected]:
 	cp $(PTXPROJ_PATH)/$(PTXPROJ_PLATFORM_DIR)/sysroot-target/usr/lib/libkbus-register-settings.so* src/libkbus-register-settings-bin
 	cp $(PTXPROJ_PATH)/$(PTXPROJ_PLATFORM_DIR)/sysroot-target/usr/lib/libkbus-register-settings.a src/libkbus-register-settings-bin
-	cp $(PTXPROJ_PATH)/$(PTXPROJ_PLATFORM_DIR)/sysroot-target/usr/include/kbus_register_settings*.h src/libkbus-register-settings-bin
+	cp $(PTXPROJ_PATH)/$(PTXPROJ_PLATFORM_DIR)/sysroot-target/usr/include/kbus_register_settings.h src/libkbus-register-settings-bin
+	cp $(PTXPROJ_PATH)/$(PTXPROJ_PLATFORM_DIR)/sysroot-target/usr/include/kbus_register_settings_common.h src/libkbus-register-settings-bin
+	# remove symlinked files (the wildcard variant + subsequent removal is used so that it's not needed to pin a specific library version for this makefile :p)
+	rm src/libkbus-register-settings-bin/libkbus-register-settings.so
+	rm src/libkbus-register-settings-bin/libkbus-register-settings.so.?
 
 clean:
 	-rm src/libkbus-register-settings-bin/kbus_register_settings*.h
