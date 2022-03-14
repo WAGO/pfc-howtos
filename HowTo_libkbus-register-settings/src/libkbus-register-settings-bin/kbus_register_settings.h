@@ -1,10 +1,6 @@
 #ifndef KBUS_REGISTER_SETTINGS_H
 #define KBUS_REGISTER_SETTINGS_H
 
-#include <dal/adi_application_interface.h>
-
-#include "kbus_register_settings_common.h"
-
 /**
  * @file
  * @brief Configure (serial) terminals over kbus.
@@ -33,7 +29,25 @@
  * - slot numbers do not exclude unsupported terminals, 
  *      e. g. if an unsupported terminal is connected at position 1 and a 750-652 terminal at position 2,
  *      the 750-652 terminal has slot number 2
+ *
+ * Thread Safety
+ * -------------
+ * None, do not use the structures and methods provided across multiple threads.
+ *
+ * @author F. Warzecha: WAGO Kontakttechnik GmbH & Co. KG
  */
+
+#include <dal/adi_application_interface.h>
+
+#include "kbus_register_settings_common.h"
+
+/**
+ * @def
+ * @brief declare three fields of the same type postfixed for all 3 phases of 3pm modules
+ */
+#define CONFIGURATION_SET_FIELDS_ALL_PHASES(type, name) type name ## _pl1 ; \
+    type name ## _pl2 ; \
+    type name ## _pl3 ; 
 
 /**
  * @brief Collection of all possible configuration values.
@@ -58,31 +72,30 @@ typedef struct {
     KbusRegXonXoff xon_xoff_send;
     KbusRegXonXoff xon_xoff_receive;
     KbusRegCopyStatusbyte copy_statusbyte;
+    KbusRegWatchdogTimer watchdog_timer;
+    KbusRegDcFilter dc_filter;
+    CONFIGURATION_SET_FIELDS_ALL_PHASES (KbusRegUserScaling, user_scaling)
+    CONFIGURATION_SET_FIELDS_ALL_PHASES (KbusRegProcessImage, process_image)
+    CONFIGURATION_SET_FIELDS_ALL_PHASES (KbusRegEnergySign, energy_sign)
+    CONFIGURATION_SET_FIELDS_ALL_PHASES (KbusRegClearMinMaxValues, clear_min_max_values)
+    CONFIGURATION_SET_FIELDS_ALL_PHASES (KbusRegEnergyMeasurementScaling, energy_measurement_scaling)
 } KbusRegConfigurationSet;
+
+#undef CONFIGURATION_SET_FIELDS_ALL_PHASES
 
 /**
  * @brief #KbusRegConfigurationSet with all values initialized with 0 (e. g. unconfigured).
+ *
+ * @internal this (ab)uses the default initialization rules of static objects, which states that arithmetic fields are initialized with 0 (cf 6.7.9.10)
  */
-const static KbusRegConfigurationSet KbusRegConfigurationSet_Default = {
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-    0,
-};
+const static KbusRegConfigurationSet KbusRegConfigurationSet_Default = {};
 
 /**
  * @brief Apply a configuration set to a terminal.
+ *
+ * Thread Safety
+ * -------------
+ * Do not call this method from multiple threads.
  * 
  * @param[in] adi An initialized ADI-interface.
  * @param[in] terminalSlot The index of the terminal to configure.
@@ -96,6 +109,10 @@ KbusRegErr kbus_reg_apply_configuration(tApplicationDeviceInterface *adi, uint8_
  *
  * Fills all available configuration values with the values set in the terminal.
  * All unavailable values will have the value '0'.
+ *
+ * Thread Safety
+ * -------------
+ * Do not call this method from multiple threads.
  *
  * @param[in] adi An initialized ADI-interface.
  * @param[in] terminalSlot The index of the terminal to read from.
@@ -116,6 +133,10 @@ KbusRegErr kbus_reg_extract_configuration(tApplicationDeviceInterface *adi, uint
  * 
  * Determines the terminal type and reads the terminal's settings 
  * (e. g. there is no need to call kbus_reg_read_settings() directly after initialization).
+ *
+ * Thread Safety
+ * -------------
+ * Do not use \a settings across multiple threads.
  * 
  * @param[in] adi An initialized ADI-interface.
  * @param[out] settings The settings variable to initialize.
@@ -494,5 +515,33 @@ KbusRegSettingResult kbus_reg_set_copy_statusbyte(KbusRegTerminal *settings, Kbu
  * @return If the statusbyte copy setting has been successfully read.
  */
 KbusRegSettingResult kbus_reg_get_copy_statusbyte(KbusRegTerminal *settings, KbusRegCopyStatusbyte *copy);
+
+KbusRegSettingResult kbus_reg_set_watchdog_timer(KbusRegTerminal *settings, KbusRegWatchdogTimer watchdog);
+
+KbusRegSettingResult kbus_reg_get_watchdog_timer(KbusRegTerminal *settings, KbusRegWatchdogTimer *watchdog);
+
+KbusRegSettingResult kbus_reg_set_dc_filter(KbusRegTerminal *settings, KbusRegDcFilter filter);
+
+KbusRegSettingResult kbus_reg_get_dc_filter(KbusRegTerminal *settings, KbusRegDcFilter *filter);
+
+KbusRegSettingResult kbus_reg_set_user_scaling(KbusRegTerminal *settings, KbusRegPhase phase, KbusRegUserScaling scaling);
+
+KbusRegSettingResult kbus_reg_get_user_scaling(KbusRegTerminal *settings, KbusRegPhase phase, KbusRegUserScaling *scaling);
+
+KbusRegSettingResult kbus_reg_set_process_image(KbusRegTerminal *settings, KbusRegPhase phase, KbusRegProcessImage image);
+
+KbusRegSettingResult kbus_reg_get_process_image(KbusRegTerminal *settings, KbusRegPhase phase, KbusRegProcessImage *image);
+
+KbusRegSettingResult kbus_reg_set_energy_sign(KbusRegTerminal *settings, KbusRegPhase phase, KbusRegEnergySign sign);
+
+KbusRegSettingResult kbus_reg_get_energy_sign(KbusRegTerminal *settings, KbusRegPhase phase, KbusRegEnergySign *sign);
+
+KbusRegSettingResult kbus_reg_set_clear_min_max_values(KbusRegTerminal *settings, KbusRegPhase phase, KbusRegClearMinMaxValues clear);
+
+KbusRegSettingResult kbus_reg_get_clear_min_max_values(KbusRegTerminal *settings, KbusRegPhase phase, KbusRegClearMinMaxValues *clear);
+
+KbusRegSettingResult kbus_reg_set_energy_measurement_scaling(KbusRegTerminal *settings, KbusRegPhase phase, KbusRegEnergyMeasurementScaling scaling);
+
+KbusRegSettingResult kbus_reg_get_energy_measurement_scaling(KbusRegTerminal *settings, KbusRegPhase phase, KbusRegEnergyMeasurementScaling *scaling);
 
 #endif /* KBUS_REGISTER_SETTINGS_H */
