@@ -20,3 +20,26 @@ useradd --groups wbmadmin testadmin
 passwd testadmin
 ```
 Now you have two different users to access a PFC. User **admin** to upload an IEC-project and user **testadmin** to access the web based management with admin rights. Both users are linux users, but only testadmin can login with ssh. If both users need to login with ssh, ignore step 2.
+
+
+# Compatibility list:
+| PFC | Compatible |
+|:-------------|:------------:|
+| **PFC 100** | |
+| 750-8100 | Y |
+| 750-8101 | Y |
+| 750-8102 | Y |
+|  |  |
+| **PFC 200** | |
+| 750-8202 | Y |
+| 750-8203 | Y |
+| 750-8204 | Y |
+| 750-8206 | Y |
+| 750-8207 | Y |
+| 750-8208 | Y |
+|  |  |
+| **PFC 200 G2** | |
+| 750-8212 | Y |
+| 750-8213 | Y |
+| 750-8214 | Y |
+| 750-8216 | Y |
