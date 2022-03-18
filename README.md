@@ -23,6 +23,8 @@
 | ZeroMQ                             | FW18   | High-performance asynchronous messaging library |
 | Libkbus-register-settings          | FW20.1 | Precompiled version of kbus-register-settings |
 | Register-access-65x-demo           | FW20.1 | Demo usage of the `libkbus-register-settings` library |
+| AddUserOrGroup | FW20 | Add a user or a group in different FW-versions |
+| SplitAdminUser | FW20 | Seperate admin user for codesys3 and wbm |
 
 ---
 
