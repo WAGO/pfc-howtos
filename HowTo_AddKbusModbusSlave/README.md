@@ -19,7 +19,7 @@ This HowTo is / based on a clean installation of Ubuntu LTS, with an installed a
 ```
 $cp ./ptxproj/rules/kbusmodbusslave.in    ~/wago/ptxproj/rules/
 $cp ./ptxproj/rules/kbusmodbusslave.make  ~/wago/ptxproj/rules/
-$cp ./ptxproj/src/kbusmodbusslave-1.5.1.tar.bz2 ~/wago/ptxproj/src/
+$cp ./ptxproj/src/kbusmodbusslave-1.6.0.tar.bz2 ~/wago/ptxproj/src/
 ```
 
 2. Select "kbusmodbusslave" package for build
@@ -45,7 +45,7 @@ $ptxdist clean kbusmodbusslave
         $ptxdist targetinstall kbusmodbusslave
     ```
     Afterwards you should find the IPKG installer package file:
-        ~/wago/ptxproj/platform-wago-pfcXXX/packages/kbusmodbusslave_1.5.1_armhf.ipk
+        ~/wago/ptxproj/platform-wago-pfcXXX/packages/kbusmodbusslave_1.6.0_armhf.ipk
 
   2. Build complete firmware image "sd.hdimg"  (optional)
   ```
@@ -59,7 +59,7 @@ $ptxdist clean kbusmodbusslave
 
 As usual, you can:
 - copy image file "sd.hdimg" with command "dd" to SD-Card and boot PFC200 from it.
-- transfer package "kbusmodbusslave_1.5.1_armhf.ipk" into PFC's file system and call "opkg install <pkg-name>.ipk"
+- transfer package "kbusmodbusslave_1.6.0_armhf.ipk" into PFC's file system and call "opkg install <pkg-name>.ipk"
 - utilize Web-Based-Management(WBM) feature "Software-Upload".
 
 ----------------------------------------------------------------------------------------------------------------------
@@ -68,9 +68,9 @@ As usual, you can:
 1. On development host
 ```
     $cd ~/wago/ptxroj/platform-wago-pfcXXX/packages/
-    $scp kbusmodbusslave_1.5.1_armhf.ipk root@<IP-of-PFC>:/root
+    $scp kbusmodbusslave_1.6.0_armhf.ipk root@<IP-of-PFC>:/root
     root@<IP-of-PFC>'s password:  # Enter the root password (default: wago)
-    kbusmodbusslave_1.5.1_armhf.ipk               100%   23KB  23.3KB/s   00:00
+    kbusmodbusslave_1.6.0_armhf.ipk               100%   23KB  23.3KB/s   00:00
 ```
 
 2. On PFC
@@ -86,8 +86,8 @@ Connect to PFC via SSH
 You are now connected to the PFC.
 Install kbusmodbusslave:
 ```
-    $ opkg install kbusmodbusslave_1.5.1_armhf.ipk
-    Installing kbusmodbusslave (1.5.1) on root.
+    $ opkg install kbusmodbusslave_1.6.0_armhf.ipk
+    Installing kbusmodbusslave (1.6.0) on root.
     Configuring kbusmodbusslave.
 ```
 Contratulations kbusmodbusslave is now installed on the PFC.
@@ -135,7 +135,7 @@ Test it on PFC:
 3. Press button [Browser] to open the local file dialogue.
 ```
     Browse to attached folder "./packages/"
-    Select package to install or update, here "kbusmodbusslave_1.5.1_armhf.ipk".
+    Select package to install or update, here "kbusmodbusslave_1.6.0_armhf.ipk".
 ```
 
 4. Click on button [Start Upload].
@@ -146,7 +146,7 @@ Test it on PFC:
 ```
     Internally WBM just calls:
         >cd /home/
-        >opkg install kbusmodbusslave_1.5.1_armhf.ipk
+        >opkg install kbusmodbusslave_1.6.0_armhf.ipk
 ```
 
 6. Open a (ssh or serial) terminal session to PFC
