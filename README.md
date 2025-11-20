@@ -13,7 +13,7 @@
 | AutoCopySD-CardImage2InternalFlash | FW12   | Automaticaly copies SD card image to internal flash |
 | BuildRustExecutables               | FW17   | Cross-compile RUST executables |
 | Certmonger                         | FW20.1 | Daemon monitors certificates for impending expiration |
-| HowTo_GenerateWUPFile              | FW12   | Generate WAGO-Upload-File |
+| HowTo_GenerateWUPFile              | FW30   | Generate WAGO-Upload-File |
 | KbusModbusSlave                    | FW14 | Adding KbusModbusSlave |
 | Mono                               | FW14   | Mono is a runtime implementation|
 | mosquittoBroker                    | FW12.1 | Adding a Mosquitto Broker |
